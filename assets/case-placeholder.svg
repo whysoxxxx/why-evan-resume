@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Case study placeholder</title>
+  <desc id="desc">A dark vertical placeholder image for case study cards.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0c0f"/>
+      <stop offset="0.5" stop-color="#15131a"/>
+      <stop offset="1" stop-color="#0b1012"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#a78bfa" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="url(#bg)"/>
+  <g opacity="0.72">
+    <path d="M-40 820C210 640 272 1000 514 790C686 640 746 680 940 540" fill="none" stroke="url(#line)" stroke-width="12"/>
+    <path d="M-40 900C218 705 320 1070 560 840C710 696 782 742 940 640" fill="none" stroke="url(#line)" stroke-width="4" opacity="0.5"/>
+  </g>
+  <g transform="translate(450 580)" text-anchor="middle">
+    <rect x="-130" y="-130" width="260" height="260" rx="34" fill="#ffffff" opacity="0.05" stroke="#ffffff" stroke-opacity="0.16"/>
+    <text y="12" fill="#ede9fe" font-family="Arial, sans-serif" font-size="42" font-weight="700" letter-spacing="6">CASE</text>
+    <text y="62" fill="#a1a1aa" font-family="Arial, sans-serif" font-size="20" letter-spacing="5">PLACEHOLDER</text>
+  </g>
+</svg>

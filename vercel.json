@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/evan-portfolio.html"
+    }
+  ]
+}

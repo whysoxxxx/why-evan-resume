@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>文洪宇 Evan | AI 视频设计师作品集</title>
+  <meta name="description" content="文洪宇 Evan，AI 视频设计师，专注 AIGC 视频、动态视觉、建筑投影与视觉叙事。">
+  <meta property="og:title" content="文洪宇 Evan | AI 视频设计师">
+  <meta property="og:description" content="AIGC video design, motion graphics, visual storytelling.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#09090b">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #09090b;
+      --surface: #111114;
+      --surface-2: #18181b;
+      --surface-3: #222226;
+      --text: #f6f3ee;
+      --muted: #aaa49b;
+      --dim: #77716a;
+      --line: rgba(246, 243, 238, 0.14);
+      --accent: #a78bfa;
+      --accent-2: #6ee7b7;
+      --accent-ink: #14091d;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      --radius: 18px;
+      --max: 1180px;
+    }
+
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f4f0e8;
+      --surface: #fbf8f1;
+      --surface-2: #ebe4d8;
+      --surface-3: #ddd3c5;
+      --text: #161412;
+      --muted: #655f58;
+      --dim: #8b8277;
+      --line: rgba(22, 20, 18, 0.16);
+      --accent: #6841c8;
+      --accent-2: #047857;
+      --accent-ink: #f8f2ff;
+      --shadow: 0 24px 70px rgba(72, 55, 34, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(167, 139, 250, 0.18), transparent 24rem),
+        linear-gradient(180deg, rgba(110, 231, 183, 0.08), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      line-height: 1.6;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.5;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page-shell {
+      width: min(calc(100% - 48px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-size: 24px;
+    }
+
+    .brand small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav a,
+    .icon-button {
+      min-height: 42px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+
+    .nav a {
+      padding: 0 14px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav a:hover,
+    .icon-button:hover {
+      color: var(--text);
+      border-color: var(--line);
+      background: var(--surface);
+    }
+
+    .icon-button {
+      width: 42px;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .menu-button {
+      display: none;
+    }
+
+    .hero {
+      min-height: calc(100vh - 78px);
+      display: grid;
+      align-items: center;
+      padding: 82px 0 72px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(32px, 6vw, 84px);
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--accent-2);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 38px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    h1 {
+      margin: 20px 0 24px;
+      font-size: clamp(56px, 11vw, 132px);
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      font-weight: 950;
+    }
+
+    .hero-name {
+      display: block;
+    }
+
+    .hero-roman {
+      display: block;
+      color: var(--accent);
+      font-style: italic;
+      padding-left: 0.05em;
+    }
+
+    .hero-copy {
+      max-width: 660px;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.72;
+      margin: 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .button {
+      min-height: 48px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 70%, var(--line));
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+      border-color: transparent;
+    }
+
+    .hero-panel {
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .focus-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .focus-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .focus-list strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .section {
+      padding: clamp(72px, 10vw, 144px) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.45fr) 1fr;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 46px;
+    }
+
+    .kicker {
+      color: var(--dim);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    h2 {
+      margin: 10px 0 0;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+    }
+
+    .section-note {
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .showreel {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: min(64vw, 670px);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: var(--surface-2);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .showreel img {
+      filter: saturate(0.86) contrast(1.05);
+      opacity: 0.78;
+      transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1), opacity 250ms ease;
+    }
+
+    .showreel:hover img {
+      transform: scale(1.035);
+      opacity: 0.92;
+    }
+
+    .showreel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(9,9,11,0.82), transparent 45%), linear-gradient(90deg, rgba(9,9,11,0.5), transparent 58%);
+      z-index: 1;
+    }
+
+    .showreel-content {
+      position: absolute;
+      inset: auto 28px 28px 28px;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      color: #f6f3ee;
+    }
+
+    .play-badge {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(167, 139, 250, 0.92);
+      color: #14091d;
+      font-size: 30px;
+      box-shadow: 0 18px 56px rgba(167, 139, 250, 0.26);
+    }
+
+    .showreel h3 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 4vw, 48px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .showreel p {
+      margin: 0;
+      max-width: 520px;
+      color: rgba(246,243,238,0.74);
+    }
+
+    .works-rail-wrap {
+      position: relative;
+      margin-inline: calc((100vw - min(calc(100vw - 48px), var(--max))) / -2);
+      padding-inline: calc((100vw - min(calc(100vw - 48px), var(--max))) / 2);
+      overflow: hidden;
+    }
+
+    .works-rail-wrap::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: clamp(40px, 10vw, 120px);
+      height: 100%;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, var(--bg));
+    }
+
+    .works-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: clamp(280px, 36vw, 460px);
+      gap: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 6px 0 24px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface-3) transparent;
+    }
+
+    .work-card {
+      display: grid;
+      gap: 18px;
+      color: inherit;
+      scroll-snap-align: start;
+    }
+
+    .work-media {
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+    }
+
+    .work-media img {
+      opacity: 0.82;
+      transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease;
+    }
+
+    .work-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: var(--surface-2);
+    }
+
+    .work-video:fullscreen,
+    .work-video:-webkit-full-screen {
+      object-fit: contain;
+      background: #000;
+    }
+
+    .work-card:hover img {
+      transform: scale(1.045);
+      opacity: 1;
+    }
+
+    .work-meta {
+      display: grid;
+      gap: 14px;
+      align-items: start;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+
+    .work-meta h3 {
+      margin: 0;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+    }
+
+    .work-meta p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 56ch;
+    }
+
+    .index {
+      color: var(--accent);
+      font-weight: 900;
+      letter-spacing: 0.12em;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: clamp(28px, 6vw, 72px);
+      align-items: start;
+    }
+
+    .workflow-visual {
+      position: sticky;
+      top: 110px;
+      aspect-ratio: 3 / 4;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      box-shadow: var(--shadow);
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 62px 1fr;
+      gap: 18px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step-number {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .step h3 {
+      margin: 0 0 6px;
+      font-size: 23px;
+      letter-spacing: -0.02em;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .case-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: color-mix(in srgb, var(--surface) 80%, transparent);
+      display: grid;
+      align-content: start;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .case-card:hover {
+      transform: translateY(-4px);
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+      background: var(--surface);
+    }
+
+    .case-image {
+      aspect-ratio: 3 / 4;
+      background: var(--surface-2);
+    }
+
+    .case-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: var(--surface-2);
+    }
+
+    .case-video:fullscreen,
+    .case-video:-webkit-full-screen {
+      object-fit: contain;
+      background: #000;
+    }
+
+    .case-body {
+      padding: 20px;
+    }
+
+    .case-body h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      letter-spacing: -0.025em;
+    }
+
+    .case-body p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(28px, 6vw, 72px);
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .skill {
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 0;
+      margin: 0 0 28px;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .contact-list li {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .contact-list span:first-child {
+      color: var(--dim);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+    }
+
+    .contact-list a:hover {
+      color: var(--accent);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 46px 0;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .footer-mark {
+      color: var(--text);
+      font-size: clamp(36px, 8vw, 88px);
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 700ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 840px) {
+      .page-shell {
+        width: min(calc(100% - 32px), var(--max));
+      }
+
+      .topbar-inner {
+        min-height: 68px;
+      }
+
+      .menu-button {
+        display: inline-flex;
+      }
+
+      .nav {
+        position: fixed;
+        inset: 68px 16px auto 16px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .nav.is-open {
+        display: flex;
+      }
+
+      .nav a {
+        justify-content: flex-start;
+        min-height: 46px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 58px 0 72px;
+      }
+
+      .hero-grid,
+      .section-head,
+      .workflow,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        margin-top: 24px;
+      }
+
+      .case-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .works-rail-wrap {
+        margin-inline: -16px;
+        padding-inline: 16px;
+      }
+
+      .works-grid {
+        grid-auto-columns: min(82vw, 360px);
+      }
+
+      .workflow-visual {
+        position: static;
+      }
+
+      .showreel-content {
+        inset: auto 18px 18px 18px;
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .play-badge {
+        width: 58px;
+        height: 58px;
+        font-size: 24px;
+      }
+
+      .contact-list li {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="page-shell topbar-inner">
+      <a class="brand" href="#top" aria-label="回到首页">
+        EVAN <small>AI Video Design</small>
+      </a>
+      <nav class="nav" id="site-nav" aria-label="主导航">
+        <a href="#works">作品</a>
+        <a href="#workflow">工作流</a>
+        <a href="#cases">案例</a>
+        <a href="#contact">联系</a>
+      </nav>
+      <div style="display:flex; gap:8px;">
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="切换明暗主题">☼</button>
+        <button class="icon-button menu-button" id="menu-toggle" type="button" aria-label="打开菜单" aria-controls="site-nav" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero page-shell">
+      <div class="hero-grid">
+        <div class="reveal">
+          <span class="eyebrow">AIGC VIDEO DESIGNER</span>
+          <h1>
+            <span class="hero-name">文洪宇</span>
+            <span class="hero-roman">EVAN</span>
+          </h1>
+          <p class="hero-copy">把 AI 生成、动态设计和后期合成串成完整视频流程。擅长从概念、分镜、视觉生成到 AE 合成与剪辑节奏，完成适合传播、展映和现场投影的影像作品。</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#works">查看作品 ↓</a>
+            <a class="button" href="https://evan-ai-video-portfolio-why177738.netlify.app/%E6%96%87%E6%B4%AA%E5%AE%87%E7%AE%80%E5%8E%86.pdf">下载 PDF 简历</a>
+            <a class="button" href="mailto:2719118929@qq.com">联系合作</a>
+          </div>
+        </div>
+        <aside class="hero-panel reveal" aria-label="能力概览">
+          <span class="kicker">Focus</span>
+          <ul class="focus-list">
+            <li><strong>AIGC 影像</strong><span>Seedance 2.0 / GPT image 2 / LibuTV</span></li>
+            <li><strong>动态视觉</strong><span>After Effects / Motion Graphics</span></li>
+            <li><strong>投影叙事</strong><span>建筑投影 / 空间影像 / 现场节奏</span></li>
+            <li><strong>后期完成</strong><span>剪辑 / 调色 / 升格 / 合成</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section page-shell" id="showreel">
+      <a class="showreel reveal" href="#works" aria-label="查看 2026 Showreel 与精选作品">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr92kgYvbyZw6bMaBAccBxRqziPEJKuegFzj0M8ZClT_MXzaoYcKQdFg9BUA-xMnIeXcjKctI0y8JSSpYYutzL_N9ZiyKKFA0uAF9t3JezbSohCREzZ4rDo0Q2sXdYSGzG-Q5Uyzq5lPWZg8QjNYuDNhid16UdkyQJh0T_NJpyLirHLFmYuVKqbhc_HxHnRWJ9yijgukd_K05eo8gLvXYfxnU_Ql0X9Uxnnvn82_n5X_uC0x-WGhHqTKpLLqQd32SrNHxRJp98OA" alt="Evan AI 视频作品集封面" width="1600" height="900">
+        <div class="showreel-content">
+          <div>
+            <span class="kicker" style="color:rgba(246,243,238,0.62)">2026 Showreel</span>
+            <h3>作品总览</h3>
+            <p>过往作品混剪</p>
+          </div>
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </div>
+      </a>
+    </section>
+
+    <section class="section page-shell" id="works">
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Selected Works</span>
+          <h2>作品集</h2>
+        </div>
+      </div>
+
+      <div class="works-rail-wrap">
+        <div class="works-grid" aria-label="横向滑动作品卡片">
+          <article class="work-card reveal">
+            <div class="work-media">
+              <img loading="lazy" src="./assets/work-cover-4x3.svg" alt="作品 01 封面占位" width="1200" height="900">
+            </div>
+            <div class="work-meta">
+              <h3>01</h3>
+              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <div class="tag-row">
+                <span class="tag">AIGC Video</span>
+                <span class="tag">Motion Design</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card reveal">
+            <div class="work-media">
+              <img loading="lazy" src="./assets/work-cover-4x3.svg" alt="作品 02 封面占位" width="1200" height="900">
+            </div>
+            <div class="work-meta">
+              <h3>02</h3>
+              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <div class="tag-row">
+                <span class="tag">Visual Direction</span>
+                <span class="tag">Editing</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card reveal">
+            <div class="work-media">
+              <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiCqn8V96pgi_L4RsRlKU7Da4VZvRihZbMx8cESXUKwKKI_yqAbwOwrDiyR2neNB3sHzexc9H6niEdq42S0_Fm0iWUf8iRZsyDF-fM9BPlqXPqEq4CSL3FkVGGb6gBPc-dZ3GVWty6xlvpkl7csX6fr9W0MY9UVSkGWy1s4f0khxU7Kekzp2_mwuebv43UgQgS440T-rWp-c0jQzAbzayV1waIxQDXcv3a1UeI-0_ou7vEJWkR7-vophtgs9hEtTJwQGe-mC1cmQ" alt="作品 03 封面" width="900" height="1200">
+            </div>
+            <div class="work-meta">
+              <h3>03</h3>
+              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <div class="tag-row">
+                <span class="tag">Storytelling</span>
+                <span class="tag">Compositing</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card reveal">
+            <div class="work-media">
+              <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU4n4mo92wS5SbTAkGCu_jQt85cTXdSD_sCwmwI6kQUzfIr0-0nF88R1BflJAea_X3MnJXLIffZjD1_DdIBgsgAY7qz6AZJfQWT7E0r50NljzoI0lHV2CgYFyqAKPsfk9P7pYRXd2Ep7TdcZebseAnTiEY_vwjGNgNkflExJh-VVOa_TM945UNdooFSyYXKu6O8cVwEWy5NpNACLFJTlC-ARRGaTQBcBu9kay7e9VedyajCM00pXo4XNZ-bdknjmrWGcozADOrBw" alt="作品 04 封面" width="900" height="1200">
+            </div>
+            <div class="work-meta">
+              <h3>04</h3>
+              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <div class="tag-row">
+                <span class="tag">Projection</span>
+                <span class="tag">Event Visual</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card reveal">
+            <div class="work-media">
+              <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ4qw9QRnVr9Ii9Hf0NJfY7WxRTyRjKqiyd-ZiTQ_wjgUc6lCymqK7pz4cLdVoehCW3FbEIiI4EW3ptjZgoQw_SgO5L4d5qkwMumR6gWnQFIwzRnG8NbOLA0Oes2xXPgat6maT8LYqmMIq9n0-iDxMD6rW_AH6gReivx9Ah8NopR4d1LNuEhUqLqfODVp2KMXLn7kAVnbv39nwljV597NVQRy2bDLvxgfhXWFPsbGqYuj7oXhI-Bs9DparfGFfG0Kr8Eo1cfLdgg" alt="作品 05 封面" width="900" height="1200">
+            </div>
+            <div class="work-meta">
+              <h3>05</h3>
+              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <div class="tag-row">
+                <span class="tag">Spatial Media</span>
+                <span class="tag">AIGC</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card reveal">
+            <div class="work-media">
+              <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr92kgYvbyZw6bMaBAccBxRqziPEJKuegFzj0M8ZClT_MXzaoYcKQdFg9BUA-xMnIeXcjKctI0y8JSSpYYutzL_N9ZiyKKFA0uAF9t3JezbSohCREzZ4rDo0Q2sXdYSGzG-Q5Uyzq5lPWZg8QjNYuDNhid16UdkyQJh0T_NJpyLirHLFmYuVKqbhc_HxHnRWJ9yijgukd_K05eo8gLvXYfxnU_Ql0X9Uxnnvn82_n5X_uC0x-WGhHqTKpLLqQd32SrNHxRJp98OA" alt="作品 06 封面" width="1600" height="900">
+            </div>
+            <div class="work-meta">
+              <h3>06</h3>
+              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <div class="tag-row">
+                <span class="tag">Showreel</span>
+                <span class="tag">Post Production</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section page-shell" id="workflow">
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">AIGC Workflow</span>
+          <h2>AIGC 工作流</h2>
+        </div>
+        <p class="section-note">把创意拆成可执行的视觉流程：先确定叙事和镜头，再控制生成质量，最后用后期完成统一的节奏与质感。</p>
+      </div>
+
+      <div class="workflow">
+        <div class="workflow-visual reveal">
+          <img loading="lazy" src="./assets/workflow-placeholder.svg" alt="AIGC 工作流封面占位" width="900" height="1200">
+        </div>
+        <div class="steps">
+          <div class="step reveal">
+            <span class="step-number">01</span>
+            <div>
+              <h3>脚本与分镜</h3>
+              <p>确定主题、镜头结构和情绪曲线，规划生成质量重心，最高效率完成初始镜头。</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <span class="step-number">02</span>
+            <div>
+              <h3>AI 视觉生成</h3>
+              <p>使用 LLM大模型、GPT image 2、Seedance 2.0等工具生成创意脚本和分镜图到视频。</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <span class="step-number">03</span>
+            <div>
+              <h3>风格统一与画面修整</h3>
+              <p>通过剪辑最大程度处理角色一致性、色彩、清晰度、镜头连续性和素材可用性。</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <span class="step-number">04</span>
+            <div>
+              <h3>AE 合成与剪辑</h3>
+              <p>完成转场、动效、字幕、调色、声音节奏和最终输出，让项目真正可以交付。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section page-shell" id="cases">
+      <div class="section-head reveal">
+        <div>
+          <span class="kicker">Case Studies</span>
+          <h2>往期项目</h2>
+        </div>
+        <p class="section-note">项目相关背景和成果</p>
+      </div>
+
+      <div class="case-grid">
+        <article class="case-card reveal">
+          <div class="case-image">
+            <img loading="lazy" src="./assets/case-placeholder.svg" alt="吴冠中展馆封面占位" width="900" height="1200">
+          </div>
+          <div class="case-body">
+            <h3>吴冠中 新媒体展览</h3>
+            <p>负责吴冠中先生个人展览的新媒体部分的动画二创制作，让人们充分体会画面意境。</p>
+            <div class="tag-row">
+              <span class="tag">After Effect</span>
+              <span class="tag">Motion Design</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="case-card reveal">
+          <div class="case-image">
+            <img loading="lazy" src="./assets/case-placeholder.svg" alt="深圳大学 40 周年投影秀封面占位" width="900" height="1200">
+          </div>
+          <div class="case-body">
+            <h3>深圳大学 40 周年投影秀</h3>
+            <p>参与大型建筑投影视觉内容制作，将 AI 生成画面与空间叙事结合，服务现场节庆氛围。</p>
+            <div class="tag-row">
+              <span class="tag">Projection Mapping</span>
+              <span class="tag">Event Visual</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="case-card reveal">
+          <div class="case-image">
+            <img loading="lazy" src="./assets/case-placeholder.svg" alt="对话媒介建筑投影秀封面占位" width="900" height="1200">
+          </div>
+          <div class="case-body">
+            <h3>对话媒介建筑投影秀</h3>
+            <p>探索数字媒介与建筑空间之间的关系，通过沉浸式视觉、节奏和尺度建立现场观看体验。</p>
+            <div class="tag-row">
+              <span class="tag">Spatial Media</span>
+              <span class="tag">Visual Storytelling</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section page-shell" id="contact">
+      <div class="about-grid">
+        <div class="reveal">
+          <span class="kicker">Technical Palette</span>
+          <h2>熟练技能</h2>
+          <div class="skill-list" aria-label="技能标签">
+            <span class="skill">After Effects</span>
+            <span class="skill">Premiere Pro</span>
+            <span class="skill">Photoshop</span>
+            <span class="skill">Midjourney</span>
+            <span class="skill">ComfyUI</span>
+            <span class="skill">Runway</span>
+            <span class="skill">Seedance</span>
+            <span class="skill">Nanobanana</span>
+            <span class="skill">Vibe Coding</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <span class="kicker">Contact</span>
+          <h2>项目合作 或 工作机会</h2>
+          <ul class="contact-list">
+            <li>
+              <span>Email</span>
+              <a href="mailto:2719118929@qq.com">2719118929@qq.com</a>
+            </li>
+            <li>
+              <span>WeChat</span>
+              <span>WenHYu8</span>
+            </li>
+            <li>
+              <span>Phone</span>
+              <a href="tel:13168849576">13168849576</a>
+            </li>
+          </ul>
+          <div class="hero-actions" style="margin-top:0;">
+            <a class="button" href="https://evan-ai-video-portfolio-why177738.netlify.app/%E6%96%87%E6%B4%AA%E5%AE%87%E7%AE%80%E5%8E%86.pdf">下载 PDF 简历</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="page-shell footer-inner">
+      <div class="footer-mark">EVAN</div>
+      <p>© 2026 EVAN AI VIDEO DESIGN. 保持克制，追求极致。</p>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.querySelector("#site-nav");
+    const menuButton = document.querySelector("#menu-toggle");
+    const themeButton = document.querySelector("#theme-toggle");
+    const root = document.documentElement;
+
+    menuButton.addEventListener("click", () => {
+      const isOpen = nav.classList.toggle("is-open");
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.textContent = isOpen ? "×" : "☰";
+    });
+
+    nav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("is-open");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.textContent = "☰";
+      });
+    });
+
+    themeButton.addEventListener("click", () => {
+      const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = nextTheme;
+      themeButton.textContent = nextTheme === "dark" ? "☼" : "☾";
+      localStorage.setItem("evan-theme", nextTheme);
+    });
+
+    const savedTheme = localStorage.getItem("evan-theme");
+    if (savedTheme) {
+      root.dataset.theme = savedTheme;
+      themeButton.textContent = savedTheme === "dark" ? "☼" : "☾";
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll(".reveal").forEach((el, index) => {
+      el.style.transitionDelay = `${Math.min(index * 45, 260)}ms`;
+      observer.observe(el);
+    });
+
+  </script>
+</body>
+</html>

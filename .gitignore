@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Local build/deploy folders
+.netlify
+.netlify-publish
+
+# Dependencies
+node_modules
+package*.json
+
+# Large local source videos are kept out of GitHub
+*.mp4
+
+# Local-only documents
+*.pdf
