@@ -24,6 +24,15 @@
       --accent-2: #6ee7b7;
       --accent-ink: #14091d;
       --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      --ambient-a: rgba(167, 139, 250, 0.18);
+      --ambient-b: rgba(110, 231, 183, 0.1);
+      --ambient-c: rgba(56, 189, 248, 0.08);
+      --cursor-light: rgba(167, 139, 250, 0.22);
+      --cursor-light-2: rgba(110, 231, 183, 0.12);
+      --cursor-x: 50vw;
+      --cursor-y: 34vh;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
       --radius: 18px;
       --max: 1180px;
     }
@@ -42,6 +51,11 @@
       --accent-2: #047857;
       --accent-ink: #f8f2ff;
       --shadow: 0 24px 70px rgba(72, 55, 34, 0.16);
+      --ambient-a: rgba(104, 65, 200, 0.1);
+      --ambient-b: rgba(4, 120, 87, 0.07);
+      --ambient-c: rgba(14, 116, 144, 0.06);
+      --cursor-light: rgba(104, 65, 200, 0.14);
+      --cursor-light-2: rgba(4, 120, 87, 0.08);
     }
 
     * {
@@ -55,15 +69,18 @@
     body {
       margin: 0;
       min-height: 100vh;
+      max-width: 100%;
       background:
-        radial-gradient(circle at 82% 12%, rgba(167, 139, 250, 0.18), transparent 24rem),
-        linear-gradient(180deg, rgba(110, 231, 183, 0.08), transparent 34rem),
+        radial-gradient(circle at 82% 12%, var(--ambient-a), transparent 24rem),
+        linear-gradient(180deg, var(--ambient-b), transparent 34rem),
         var(--bg);
       color: var(--text);
       font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
       line-height: 1.6;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      position: relative;
     }
 
     body::before {
@@ -71,13 +88,96 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: -1;
+      z-index: 0;
       opacity: 0.5;
       background-image:
         linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
       background-size: 48px 48px;
       mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+
+    .ambient-field,
+    .cursor-light {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header,
+    main,
+    footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ambient-field {
+      overflow: hidden;
+      contain: paint;
+      opacity: 0.92;
+    }
+
+    .ambient-field::before,
+    .ambient-field::after {
+      content: "";
+      position: absolute;
+      will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .ambient-field::before {
+      width: min(1120px, 120vw);
+      height: min(880px, 110vh);
+      left: -12vw;
+      top: -8vh;
+      background:
+        radial-gradient(closest-side at 22% 28%, var(--ambient-a), transparent 72%),
+        radial-gradient(closest-side at 76% 18%, var(--ambient-c), transparent 70%),
+        radial-gradient(closest-side at 56% 76%, var(--ambient-b), transparent 76%);
+      opacity: 0.48;
+      animation: ambient-drift-a 34s var(--ease-soft) infinite alternate;
+    }
+
+    .ambient-field::after {
+      width: min(980px, 105vw);
+      height: min(760px, 95vh);
+      right: -18vw;
+      bottom: -12vh;
+      background:
+        linear-gradient(115deg, transparent 18%, color-mix(in srgb, var(--accent) 16%, transparent) 38%, transparent 62%),
+        radial-gradient(closest-side at 62% 42%, var(--ambient-b), transparent 72%);
+      opacity: 0.16;
+      animation: ambient-drift-b 48s var(--ease-soft) infinite alternate;
+    }
+
+    .cursor-light {
+      width: 34rem;
+      height: 34rem;
+      inset: auto;
+      left: 0;
+      top: 0;
+      border-radius: 999px;
+      opacity: 0;
+      transform: translate3d(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%), 0);
+      transition: opacity 320ms ease;
+      will-change: transform, opacity;
+      background: radial-gradient(circle, var(--cursor-light) 0%, var(--cursor-light-2) 34%, transparent 68%);
+    }
+
+    body.pointer-active .cursor-light {
+      opacity: 1;
+    }
+
+    @keyframes ambient-drift-a {
+      0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+      50% { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
+      100% { transform: translate3d(4%, -2%, 0) scale(1.02); }
+    }
+
+    @keyframes ambient-drift-b {
+      0% { transform: translate3d(3%, 2%, 0) rotate(0deg) scale(1.02); }
+      100% { transform: translate3d(-3%, -1%, 0) rotate(4deg) scale(1.06); }
     }
 
     a {
@@ -116,6 +216,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
+      min-width: 0;
     }
 
     .brand {
@@ -123,7 +224,7 @@
       align-items: baseline;
       gap: 10px;
       font-weight: 900;
-      letter-spacing: -0.04em;
+      letter-spacing: 0;
       font-size: 24px;
     }
 
@@ -150,7 +251,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 180ms ease;
+      transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 220ms var(--ease-out);
     }
 
     .nav a {
@@ -165,6 +266,7 @@
       color: var(--text);
       border-color: var(--line);
       background: var(--surface);
+      transform: translateY(-1px);
     }
 
     .icon-button {
@@ -214,7 +316,7 @@
       margin: 20px 0 24px;
       font-size: clamp(56px, 11vw, 132px);
       line-height: 0.92;
-      letter-spacing: -0.06em;
+      letter-spacing: 0;
       font-weight: 950;
     }
 
@@ -235,6 +337,8 @@
       font-size: clamp(18px, 2vw, 24px);
       line-height: 1.72;
       margin: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .hero-actions {
@@ -257,12 +361,13 @@
       color: var(--text);
       font-size: 14px;
       font-weight: 700;
-      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+      transition: transform 220ms var(--ease-out), background 180ms ease, border-color 180ms ease, box-shadow 220ms var(--ease-out);
     }
 
     .button:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px) scale(1.015);
       border-color: color-mix(in srgb, var(--accent) 70%, var(--line));
+      box-shadow: 0 14px 42px color-mix(in srgb, var(--accent) 18%, transparent);
     }
 
     .button.primary {
@@ -276,6 +381,12 @@
       padding-top: 24px;
       display: grid;
       gap: 18px;
+      transition: transform 360ms var(--ease-out), border-color 220ms ease;
+    }
+
+    .hero-panel:hover {
+      transform: translateY(-4px);
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
     }
 
     .focus-list {
@@ -294,6 +405,15 @@
       border-bottom: 1px solid var(--line);
       padding-bottom: 12px;
       font-size: 14px;
+    }
+
+    .focus-list li > * {
+      min-width: 0;
+    }
+
+    .focus-list span {
+      text-align: right;
+      overflow-wrap: anywhere;
     }
 
     .focus-list strong {
@@ -326,7 +446,7 @@
       margin: 10px 0 0;
       font-size: clamp(32px, 5vw, 56px);
       line-height: 1.05;
-      letter-spacing: -0.045em;
+      letter-spacing: 0;
     }
 
     .section-note {
@@ -334,18 +454,26 @@
       max-width: 620px;
       margin: 0;
       font-size: 16px;
+      overflow-wrap: anywhere;
     }
 
     .showreel {
       display: grid;
       grid-template-columns: 1fr;
       min-height: min(64vw, 670px);
+      width: 100%;
+      padding: 0;
+      border: 0;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
       border-radius: var(--radius);
       overflow: hidden;
       box-shadow: var(--shadow);
       background: var(--surface-2);
       position: relative;
       isolation: isolate;
+      transition: transform 420ms var(--ease-out), box-shadow 420ms var(--ease-out), border-color 220ms ease;
     }
 
     .showreel img {
@@ -357,6 +485,11 @@
     .showreel:hover img {
       transform: scale(1.035);
       opacity: 0.92;
+    }
+
+    .showreel:hover {
+      transform: translateY(-8px) scale(1.008);
+      box-shadow: 0 34px 100px color-mix(in srgb, var(--accent) 18%, rgba(0, 0, 0, 0.36));
     }
 
     .showreel::after {
@@ -388,19 +521,99 @@
       color: #14091d;
       font-size: 30px;
       box-shadow: 0 18px 56px rgba(167, 139, 250, 0.26);
+      transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out);
+    }
+
+    .showreel:hover .play-badge {
+      transform: translateY(-3px) scale(1.06);
+      box-shadow: 0 22px 70px color-mix(in srgb, var(--accent) 36%, transparent);
     }
 
     .showreel h3 {
       margin: 0 0 8px;
       font-size: clamp(26px, 4vw, 48px);
       line-height: 1;
-      letter-spacing: -0.04em;
+      letter-spacing: 0;
     }
 
     .showreel p {
       margin: 0;
       max-width: 520px;
       color: rgba(246,243,238,0.74);
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: clamp(18px, 4vw, 44px);
+      background: rgba(4, 4, 6, 0.76);
+      backdrop-filter: blur(18px);
+    }
+
+    .video-modal[hidden] {
+      display: none;
+    }
+
+    .video-dialog {
+      width: min(1120px, 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 32px 120px rgba(0, 0, 0, 0.54);
+      overflow: hidden;
+    }
+
+    .video-modal-head {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 16px 0 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .video-modal-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .video-close {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 180ms var(--ease-out), border-color 180ms ease, background 180ms ease;
+    }
+
+    .video-close:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .video-frame-wrap {
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .video-frame-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
     .works-rail-wrap {
@@ -440,6 +653,9 @@
       gap: 18px;
       color: inherit;
       scroll-snap-align: start;
+      position: relative;
+      transform-origin: center bottom;
+      transition: transform 320ms var(--ease-out);
     }
 
     .work-media {
@@ -448,6 +664,21 @@
       border-radius: var(--radius);
       background: var(--surface-2);
       border: 1px solid var(--line);
+      position: relative;
+      isolation: isolate;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      transition: border-color 260ms ease, box-shadow 320ms var(--ease-out);
+    }
+
+    .work-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1;
+      transition: opacity 260ms ease;
+      background: radial-gradient(circle at 50% 28%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 58%);
     }
 
     .work-media img {
@@ -474,8 +705,22 @@
       opacity: 1;
     }
 
+    .work-card:hover {
+      transform: translateY(-8px) scale(1.018);
+    }
+
+    .work-card:hover .work-media {
+      border-color: color-mix(in srgb, var(--accent) 48%, var(--line));
+      box-shadow: 0 24px 70px color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+
+    .work-card:hover .work-media::after {
+      opacity: 1;
+    }
+
     .work-meta {
       display: grid;
+      grid-template-rows: auto minmax(5.2em, auto) auto;
       gap: 14px;
       align-items: start;
       border-top: 1px solid var(--line);
@@ -484,15 +729,18 @@
 
     .work-meta h3 {
       margin: 0;
-      font-size: clamp(42px, 6vw, 72px);
-      line-height: 0.9;
-      letter-spacing: -0.06em;
+      min-height: 1.18em;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.18;
+      letter-spacing: 0;
+      white-space: nowrap;
     }
 
     .work-meta p {
-      margin: 8px 0 0;
+      margin: 0;
       color: var(--muted);
       max-width: 56ch;
+      overflow-wrap: anywhere;
     }
 
     .index {
@@ -546,6 +794,12 @@
       gap: 18px;
       padding: 22px 0;
       border-bottom: 1px solid var(--line);
+      transition: transform 260ms var(--ease-out), border-color 220ms ease;
+    }
+
+    .step:hover {
+      transform: translateX(6px);
+      border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
     }
 
     .step-number {
@@ -563,12 +817,13 @@
     .step h3 {
       margin: 0 0 6px;
       font-size: 23px;
-      letter-spacing: -0.02em;
+      letter-spacing: 0;
     }
 
     .step p {
       margin: 0;
       color: var(--muted);
+      overflow-wrap: anywhere;
     }
 
     .case-grid {
@@ -584,18 +839,42 @@
       background: color-mix(in srgb, var(--surface) 80%, transparent);
       display: grid;
       align-content: start;
-      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      position: relative;
+      isolation: isolate;
+      transition: transform 320ms var(--ease-out), border-color 220ms ease, background 220ms ease, box-shadow 320ms var(--ease-out);
+    }
+
+    .case-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1;
+      transition: opacity 260ms ease;
+      background: radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 58%);
     }
 
     .case-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-8px) scale(1.015);
       border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
       background: var(--surface);
+      box-shadow: 0 24px 80px color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+
+    .case-card:hover::before {
+      opacity: 1;
     }
 
     .case-image {
       aspect-ratio: 3 / 4;
       background: var(--surface-2);
+    }
+
+    .case-image,
+    .case-body {
+      position: relative;
+      z-index: 2;
     }
 
     .case-video {
@@ -619,12 +898,13 @@
     .case-body h3 {
       margin: 0 0 10px;
       font-size: 24px;
-      letter-spacing: -0.025em;
+      letter-spacing: 0;
     }
 
     .case-body p {
       margin: 0;
       color: var(--muted);
+      overflow-wrap: anywhere;
     }
 
     .about-grid {
@@ -648,6 +928,13 @@
       color: var(--accent);
       font-size: 13px;
       font-weight: 700;
+      transition: transform 220ms var(--ease-out), border-color 180ms ease, background 180ms ease;
+    }
+
+    .skill:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
     }
 
     .contact-list {
@@ -679,6 +966,12 @@
       color: var(--accent);
     }
 
+    .contact-list a,
+    .contact-list span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
     footer {
       border-top: 1px solid var(--line);
       padding: 46px 0;
@@ -697,18 +990,21 @@
       font-size: clamp(36px, 8vw, 88px);
       line-height: 1;
       font-weight: 950;
-      letter-spacing: -0.06em;
+      letter-spacing: 0;
     }
 
     .reveal {
       opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 700ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(28px) scale(0.985);
+      filter: blur(8px);
+      transition: opacity 760ms ease, transform 760ms var(--ease-out), filter 760ms ease;
+      will-change: opacity, transform, filter;
     }
 
     .reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
+      filter: blur(0);
     }
 
     @media (max-width: 840px) {
@@ -718,6 +1014,7 @@
 
       .topbar-inner {
         min-height: 68px;
+        gap: 12px;
       }
 
       .menu-button {
@@ -749,6 +1046,21 @@
       .hero {
         min-height: auto;
         padding: 58px 0 72px;
+        overflow: hidden;
+      }
+
+      .hero-copy {
+        max-width: 100%;
+        font-size: clamp(17px, 4.8vw, 20px);
+      }
+
+      .hero-actions {
+        width: 100%;
+      }
+
+      .button {
+        min-width: 0;
+        white-space: nowrap;
       }
 
       .hero-grid,
@@ -762,6 +1074,18 @@
         margin-top: 24px;
       }
 
+      .focus-list li {
+        display: grid;
+        grid-template-columns: minmax(82px, max-content) minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .focus-list span {
+        text-align: right;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+      }
+
       .case-grid {
         grid-template-columns: 1fr;
       }
@@ -773,6 +1097,14 @@
 
       .works-grid {
         grid-auto-columns: min(82vw, 360px);
+      }
+
+      .work-meta {
+        grid-template-rows: auto minmax(6.2em, auto) auto;
+      }
+
+      .work-meta h3 {
+        font-size: clamp(22px, 6.2vw, 30px);
       }
 
       .workflow-visual {
@@ -802,7 +1134,49 @@
       }
     }
 
+    @media (max-width: 520px) {
+      .brand {
+        gap: 8px;
+        min-width: 0;
+        font-size: 22px;
+      }
+
+      .brand small {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        overflow-wrap: anywhere;
+      }
+
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+        padding-inline: 16px;
+      }
+
+      .focus-list li {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .focus-list span {
+        text-align: left;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .ambient-field,
+      .cursor-light {
+        display: none;
+      }
+
       *,
       *::before,
       *::after {
@@ -815,11 +1189,29 @@
       .reveal {
         opacity: 1;
         transform: none;
+        filter: none;
+      }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      .cursor-light {
+        display: none;
+      }
+
+      .work-card:hover,
+      .case-card:hover,
+      .showreel:hover,
+      .hero-panel:hover,
+      .button:hover,
+      .skill:hover {
+        transform: none;
       }
     }
   </style>
 </head>
 <body>
+  <div class="ambient-field" aria-hidden="true"></div>
+  <div class="cursor-light" aria-hidden="true"></div>
   <header class="topbar">
     <div class="page-shell topbar-inner">
       <a class="brand" href="#top" aria-label="回到首页">
@@ -850,7 +1242,7 @@
           <p class="hero-copy">把 AI 生成、动态设计和后期合成串成完整视频流程。擅长从概念、分镜、视觉生成到 AE 合成与剪辑节奏，完成适合传播、展映和现场投影的影像作品。</p>
           <div class="hero-actions">
             <a class="button primary" href="#works">查看作品 ↓</a>
-            <a class="button" href="https://evan-ai-video-portfolio-why177738.netlify.app/%E6%96%87%E6%B4%AA%E5%AE%87%E7%AE%80%E5%8E%86.pdf">下载 PDF 简历</a>
+            <a class="button" href="./文洪宇简历.pdf">下载 PDF 简历</a>
             <a class="button" href="mailto:2719118929@qq.com">联系合作</a>
           </div>
         </div>
@@ -867,7 +1259,7 @@
     </section>
 
     <section class="section page-shell" id="showreel">
-      <a class="showreel reveal" href="#works" aria-label="查看 2026 Showreel 与精选作品">
+      <button class="showreel reveal" type="button" id="showreel-play" aria-label="播放 2026 作品集混剪">
         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr92kgYvbyZw6bMaBAccBxRqziPEJKuegFzj0M8ZClT_MXzaoYcKQdFg9BUA-xMnIeXcjKctI0y8JSSpYYutzL_N9ZiyKKFA0uAF9t3JezbSohCREzZ4rDo0Q2sXdYSGzG-Q5Uyzq5lPWZg8QjNYuDNhid16UdkyQJh0T_NJpyLirHLFmYuVKqbhc_HxHnRWJ9yijgukd_K05eo8gLvXYfxnU_Ql0X9Uxnnvn82_n5X_uC0x-WGhHqTKpLLqQd32SrNHxRJp98OA" alt="Evan AI 视频作品集封面" width="1600" height="900">
         <div class="showreel-content">
           <div>
@@ -877,7 +1269,7 @@
           </div>
           <span class="play-badge" aria-hidden="true">▶</span>
         </div>
-      </a>
+      </button>
     </section>
 
     <section class="section page-shell" id="works">
@@ -892,41 +1284,41 @@
         <div class="works-grid" aria-label="横向滑动作品卡片">
           <article class="work-card reveal">
             <div class="work-media">
-              <img loading="lazy" src="./assets/work-cover-4x3.svg" alt="作品 01 封面占位" width="1200" height="900">
+              <img loading="lazy" src="./assets/AI漫剧.jpg" alt="AI 漫剧项目封面" width="1200" height="900">
             </div>
             <div class="work-meta">
-              <h3>01</h3>
-              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <h3>AI 漫剧项目（已上线）</h3>
+              <p>该项目为《别惹我，我防御拉满》，目前红果热度3400W，抖音短剧双强榜TOP11，该项目从分镜到剪辑均由我统筹完成。</p>
               <div class="tag-row">
                 <span class="tag">AIGC Video</span>
-                <span class="tag">Motion Design</span>
+                <span class="tag">Video Editing</span>
               </div>
             </div>
           </article>
 
           <article class="work-card reveal">
             <div class="work-media">
-              <img loading="lazy" src="./assets/work-cover-4x3.svg" alt="作品 02 封面占位" width="1200" height="900">
+              <img loading="lazy" src="./assets/AI2D.jpg" alt="二维漫剧封面" width="1200" height="900">
             </div>
             <div class="work-meta">
-              <h3>02</h3>
-              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <h3>二维漫剧</h3>
+              <p>《别惹我，我防御拉满》的二维画风尝试，后因平台政策转变为3D画风。</p>
               <div class="tag-row">
-                <span class="tag">Visual Direction</span>
-                <span class="tag">Editing</span>
+                <span class="tag">AIGC Video</span>
+                <span class="tag">Video Editing</span>
               </div>
             </div>
           </article>
 
           <article class="work-card reveal">
             <div class="work-media">
-              <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiCqn8V96pgi_L4RsRlKU7Da4VZvRihZbMx8cESXUKwKKI_yqAbwOwrDiyR2neNB3sHzexc9H6niEdq42S0_Fm0iWUf8iRZsyDF-fM9BPlqXPqEq4CSL3FkVGGb6gBPc-dZ3GVWty6xlvpkl7csX6fr9W0MY9UVSkGWy1s4f0khxU7Kekzp2_mwuebv43UgQgS440T-rWp-c0jQzAbzayV1waIxQDXcv3a1UeI-0_ou7vEJWkR7-vophtgs9hEtTJwQGe-mC1cmQ" alt="作品 03 封面" width="900" height="1200">
+              <img loading="lazy" src="./assets/提线.jpg" alt="个人实验短片《提线》封面" width="1200" height="900">
             </div>
             <div class="work-meta">
-              <h3>03</h3>
-              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <h3>个人实验短片《提线》</h3>
+              <p>全AI流程的一次实验，从创意、剧本、分镜、提示词均由AI生成，最后剪辑成片。</p>
               <div class="tag-row">
-                <span class="tag">Storytelling</span>
+                <span class="tag">AIGC Video</span>
                 <span class="tag">Compositing</span>
               </div>
             </div>
@@ -934,14 +1326,13 @@
 
           <article class="work-card reveal">
             <div class="work-media">
-              <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU4n4mo92wS5SbTAkGCu_jQt85cTXdSD_sCwmwI6kQUzfIr0-0nF88R1BflJAea_X3MnJXLIffZjD1_DdIBgsgAY7qz6AZJfQWT7E0r50NljzoI0lHV2CgYFyqAKPsfk9P7pYRXd2Ep7TdcZebseAnTiEY_vwjGNgNkflExJh-VVOa_TM945UNdooFSyYXKu6O8cVwEWy5NpNACLFJTlC-ARRGaTQBcBu9kay7e9VedyajCM00pXo4XNZ-bdknjmrWGcozADOrBw" alt="作品 04 封面" width="900" height="1200">
+              <img loading="lazy" src="./assets/海外.jpg" alt="海外真人短剧封面" width="1200" height="900">
             </div>
             <div class="work-meta">
-              <h3>04</h3>
-              <p>项目占位：后续替换为真实作品标题、职责说明和视频链接。</p>
+              <h3>海外真人短剧</h3>
+              <p>海外实验真人短剧。</p>
               <div class="tag-row">
-                <span class="tag">Projection</span>
-                <span class="tag">Event Visual</span>
+                <span class="tag">Short Video</span>
               </div>
             </div>
           </article>
@@ -988,7 +1379,7 @@
 
       <div class="workflow">
         <div class="workflow-visual reveal">
-          <img loading="lazy" src="./assets/workflow-placeholder.svg" alt="AIGC 工作流封面占位" width="900" height="1200">
+          <img loading="lazy" src="./assets/aigc-workflow-agents.png" alt="AIGC 工作流协作画面" width="900" height="1200">
         </div>
         <div class="steps">
           <div class="step reveal">
@@ -1035,7 +1426,7 @@
       <div class="case-grid">
         <article class="case-card reveal">
           <div class="case-image">
-            <img loading="lazy" src="./assets/case-placeholder.svg" alt="吴冠中展馆封面占位" width="900" height="1200">
+            <img loading="lazy" src="./assets/吴冠中.jpg" alt="吴冠中新媒体展览封面" width="900" height="1200">
           </div>
           <div class="case-body">
             <h3>吴冠中 新媒体展览</h3>
@@ -1049,7 +1440,7 @@
 
         <article class="case-card reveal">
           <div class="case-image">
-            <img loading="lazy" src="./assets/case-placeholder.svg" alt="深圳大学 40 周年投影秀封面占位" width="900" height="1200">
+            <img loading="lazy" src="./assets/40.jpg" alt="深圳大学 40 周年投影秀封面" width="900" height="1200">
           </div>
           <div class="case-body">
             <h3>深圳大学 40 周年投影秀</h3>
@@ -1063,7 +1454,7 @@
 
         <article class="case-card reveal">
           <div class="case-image">
-            <img loading="lazy" src="./assets/case-placeholder.svg" alt="对话媒介建筑投影秀封面占位" width="900" height="1200">
+            <img loading="lazy" src="./assets/致艺楼.jpg" alt="对话媒介建筑投影秀封面" width="900" height="1200">
           </div>
           <div class="case-body">
             <h3>对话媒介建筑投影秀</h3>
@@ -1081,7 +1472,7 @@
       <div class="about-grid">
         <div class="reveal">
           <span class="kicker">Technical Palette</span>
-          <h2>熟练技能</h2>
+          <h2>熟练的技能</h2>
           <div class="skill-list" aria-label="技能标签">
             <span class="skill">After Effects</span>
             <span class="skill">Premiere Pro</span>
@@ -1096,7 +1487,7 @@
         </div>
         <div class="reveal">
           <span class="kicker">Contact</span>
-          <h2>项目合作 或 工作机会</h2>
+          <h2>项目合作or工作机会</h2>
           <ul class="contact-list">
             <li>
               <span>Email</span>
@@ -1112,7 +1503,7 @@
             </li>
           </ul>
           <div class="hero-actions" style="margin-top:0;">
-            <a class="button" href="https://evan-ai-video-portfolio-why177738.netlify.app/%E6%96%87%E6%B4%AA%E5%AE%87%E7%AE%80%E5%8E%86.pdf">下载 PDF 简历</a>
+            <a class="button" href="./文洪宇简历.pdf">下载 PDF 简历</a>
           </div>
         </div>
       </div>
@@ -1126,11 +1517,33 @@
     </div>
   </footer>
 
+  <div class="video-modal" id="showreel-modal" hidden>
+    <div class="video-dialog" role="dialog" aria-modal="true" aria-labelledby="showreel-modal-title">
+      <div class="video-modal-head">
+        <p class="video-modal-title" id="showreel-modal-title">2026 作品集混剪</p>
+        <button class="video-close" type="button" id="showreel-close" aria-label="关闭视频">×</button>
+      </div>
+      <div class="video-frame-wrap">
+        <iframe id="showreel-frame" title="2026 作品集混剪视频" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+
   <script>
     const nav = document.querySelector("#site-nav");
     const menuButton = document.querySelector("#menu-toggle");
     const themeButton = document.querySelector("#theme-toggle");
+    const showreelPlay = document.querySelector("#showreel-play");
+    const showreelModal = document.querySelector("#showreel-modal");
+    const showreelClose = document.querySelector("#showreel-close");
+    const showreelFrame = document.querySelector("#showreel-frame");
     const root = document.documentElement;
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    const showreelSrc = "https://player.bilibili.com/player.html?bvid=BV1us4y1p7sE&page=1&high_quality=1&autoplay=1";
+    const canUseMotion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let cursorFrame = 0;
+    let cursorX = window.innerWidth * 0.5;
+    let cursorY = window.innerHeight * 0.34;
 
     menuButton.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("is-open");
@@ -1150,6 +1563,7 @@
       const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
       root.dataset.theme = nextTheme;
       themeButton.textContent = nextTheme === "dark" ? "☼" : "☾";
+      themeMeta?.setAttribute("content", nextTheme === "dark" ? "#09090b" : "#f4f0e8");
       localStorage.setItem("evan-theme", nextTheme);
     });
 
@@ -1157,6 +1571,55 @@
     if (savedTheme) {
       root.dataset.theme = savedTheme;
       themeButton.textContent = savedTheme === "dark" ? "☼" : "☾";
+      themeMeta?.setAttribute("content", savedTheme === "dark" ? "#09090b" : "#f4f0e8");
+    }
+
+    const openShowreel = () => {
+      showreelFrame.src = showreelSrc;
+      showreelModal.hidden = false;
+      document.body.classList.add("modal-open");
+      showreelClose.focus();
+    };
+
+    const closeShowreel = () => {
+      showreelModal.hidden = true;
+      showreelFrame.src = "";
+      document.body.classList.remove("modal-open");
+      showreelPlay.focus();
+    };
+
+    showreelPlay.addEventListener("click", openShowreel);
+    showreelClose.addEventListener("click", closeShowreel);
+    showreelModal.addEventListener("click", (event) => {
+      if (event.target === showreelModal) {
+        closeShowreel();
+      }
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !showreelModal.hidden) {
+        closeShowreel();
+      }
+    });
+
+    if (canUseMotion && window.matchMedia("(pointer: fine)").matches) {
+      window.addEventListener("pointermove", (event) => {
+        cursorX += (event.clientX - cursorX) * 0.32;
+        cursorY += (event.clientY - cursorY) * 0.32;
+        document.body.classList.add("pointer-active");
+
+        if (!cursorFrame) {
+          cursorFrame = requestAnimationFrame(() => {
+            root.style.setProperty("--cursor-x", `${cursorX}px`);
+            root.style.setProperty("--cursor-y", `${cursorY}px`);
+            cursorFrame = 0;
+          });
+        }
+      }, { passive: true });
+
+      window.addEventListener("pointerleave", () => {
+        document.body.classList.remove("pointer-active");
+      });
     }
 
     const observer = new IntersectionObserver((entries) => {
