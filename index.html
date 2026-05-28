@@ -658,6 +658,16 @@
       transition: transform 320ms var(--ease-out);
     }
 
+    .playable-card {
+      cursor: pointer;
+    }
+
+    .playable-card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 6px;
+      border-radius: var(--radius);
+    }
+
     .work-media {
       aspect-ratio: 4 / 3;
       overflow: hidden;
@@ -1296,7 +1306,7 @@
             </div>
           </article>
 
-          <article class="work-card reveal">
+          <article class="work-card reveal playable-card" role="button" tabindex="0" data-video-title="二维漫剧" data-bvid="BV1oYGX6CEuv">
             <div class="work-media">
               <img loading="lazy" src="./assets/AI2D.jpg" alt="二维漫剧封面" width="1200" height="900">
             </div>
@@ -1310,7 +1320,7 @@
             </div>
           </article>
 
-          <article class="work-card reveal">
+          <article class="work-card reveal playable-card" role="button" tabindex="0" data-video-title="个人实验短片《提线》" data-bvid="BV1oYGX6CEY5">
             <div class="work-media">
               <img loading="lazy" src="./assets/提线.jpg" alt="个人实验短片《提线》封面" width="1200" height="900">
             </div>
@@ -1324,7 +1334,7 @@
             </div>
           </article>
 
-          <article class="work-card reveal">
+          <article class="work-card reveal playable-card" role="button" tabindex="0" data-video-title="海外真人短剧" data-bvid="BV1oYGX6CEao">
             <div class="work-media">
               <img loading="lazy" src="./assets/海外.jpg" alt="海外真人短剧封面" width="1200" height="900">
             </div>
@@ -1424,7 +1434,7 @@
       </div>
 
       <div class="case-grid">
-        <article class="case-card reveal">
+        <article class="case-card reveal playable-card" role="button" tabindex="0" data-video-title="吴冠中 新媒体展览" data-bvid="BV1GkGX6BEsS">
           <div class="case-image">
             <img loading="lazy" src="./assets/吴冠中.jpg" alt="吴冠中新媒体展览封面" width="900" height="1200">
           </div>
@@ -1438,7 +1448,7 @@
           </div>
         </article>
 
-        <article class="case-card reveal">
+        <article class="case-card reveal playable-card" role="button" tabindex="0" data-video-title="深圳大学 40 周年投影秀" data-bvid="BV1XrGX6MEJK">
           <div class="case-image">
             <img loading="lazy" src="./assets/40.jpg" alt="深圳大学 40 周年投影秀封面" width="900" height="1200">
           </div>
@@ -1452,7 +1462,7 @@
           </div>
         </article>
 
-        <article class="case-card reveal">
+        <article class="case-card reveal playable-card" role="button" tabindex="0" data-video-title="对话媒介建筑投影秀" data-bvid="BV1eD4y1F7pj">
           <div class="case-image">
             <img loading="lazy" src="./assets/致艺楼.jpg" alt="对话媒介建筑投影秀封面" width="900" height="1200">
           </div>
@@ -1537,10 +1547,12 @@
     const showreelModal = document.querySelector("#showreel-modal");
     const showreelClose = document.querySelector("#showreel-close");
     const showreelFrame = document.querySelector("#showreel-frame");
+    const showreelModalTitle = document.querySelector("#showreel-modal-title");
     const root = document.documentElement;
     const themeMeta = document.querySelector('meta[name="theme-color"]');
-    const showreelSrc = "https://player.bilibili.com/player.html?bvid=BV1us4y1p7sE&page=1&high_quality=1&autoplay=1";
+    const bilibiliPlayerUrl = (bvid) => `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(bvid)}&page=1&high_quality=1&autoplay=1`;
     const canUseMotion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let lastVideoTrigger = showreelPlay;
     let cursorFrame = 0;
     let cursorX = window.innerWidth * 0.5;
     let cursorY = window.innerHeight * 0.34;
@@ -1574,21 +1586,41 @@
       themeMeta?.setAttribute("content", savedTheme === "dark" ? "#09090b" : "#f4f0e8");
     }
 
-    const openShowreel = () => {
-      showreelFrame.src = showreelSrc;
+    const openVideo = (trigger, title, bvid) => {
+      lastVideoTrigger = trigger;
+      showreelModalTitle.textContent = title;
+      showreelFrame.title = `${title}视频`;
+      showreelFrame.src = bilibiliPlayerUrl(bvid);
       showreelModal.hidden = false;
       document.body.classList.add("modal-open");
       showreelClose.focus();
+    };
+
+    const openShowreel = () => {
+      openVideo(showreelPlay, "2026 作品集混剪", "BV1us4y1p7sE");
     };
 
     const closeShowreel = () => {
       showreelModal.hidden = true;
       showreelFrame.src = "";
       document.body.classList.remove("modal-open");
-      showreelPlay.focus();
+      lastVideoTrigger?.focus();
     };
 
     showreelPlay.addEventListener("click", openShowreel);
+    document.querySelectorAll("[data-bvid]").forEach((card) => {
+      const playCard = () => {
+        openVideo(card, card.dataset.videoTitle, card.dataset.bvid);
+      };
+
+      card.addEventListener("click", playCard);
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          playCard();
+        }
+      });
+    });
     showreelClose.addEventListener("click", closeShowreel);
     showreelModal.addEventListener("click", (event) => {
       if (event.target === showreelModal) {
