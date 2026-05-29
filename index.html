@@ -65,6 +65,7 @@
 
     html {
       scroll-behavior: smooth;
+      overflow-x: hidden;
     }
 
     body {
@@ -96,6 +97,7 @@
         linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
       background-size: 48px 48px;
       mask-image: linear-gradient(to bottom, black, transparent 78%);
+      transform: translate3d(calc(var(--intro-scroll) * -18px), calc(var(--intro-scroll) * 12px), 0);
     }
 
     .ambient-field,
@@ -287,23 +289,31 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      opacity: 0.52;
+      opacity: 0.72;
       mix-blend-mode: screen;
     }
 
     [data-theme="light"] #agent-field {
-      opacity: 0.28;
+      opacity: 0.34;
       mix-blend-mode: multiply;
     }
 
+    .intro-stage {
+      min-height: calc(128svh - 78px);
+      position: relative;
+      z-index: 1;
+    }
+
     .intro-hero {
+      position: sticky;
+      top: 78px;
       min-height: calc(100svh - 78px);
       display: grid;
       grid-template-rows: auto 1fr auto;
       gap: clamp(28px, 5vw, 64px);
       padding: clamp(34px, 6vw, 76px) 0 clamp(44px, 7vw, 92px);
-      position: relative;
       isolation: isolate;
+      transform: translateY(calc(var(--intro-scroll) * -7vh));
     }
 
     .intro-hero::before {
@@ -312,7 +322,7 @@
       inset: 8% -8% 4%;
       z-index: -1;
       pointer-events: none;
-      opacity: calc(0.34 - var(--intro-scroll) * 0.18);
+      opacity: calc(0.42 - var(--intro-scroll) * 0.22);
       background:
         radial-gradient(circle at 24% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 32%),
         radial-gradient(circle at 78% 18%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 34%),
@@ -331,13 +341,19 @@
       font-weight: 800;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      opacity: calc(1 - var(--intro-scroll) * 0.85);
+      opacity: calc(1 - var(--intro-scroll) * 1.25);
     }
 
     .intro-mast strong {
       color: var(--text);
       font-size: clamp(22px, 3vw, 34px);
       letter-spacing: 0;
+    }
+
+    .intro-mast span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      line-height: 1.5;
     }
 
     .intro-grid {
@@ -348,7 +364,8 @@
       align-items: end;
       transform:
         translateY(calc(var(--intro-scroll) * -20px))
-        scale(calc(1 - var(--intro-scroll) * 0.025));
+        scale(calc(1 - var(--intro-scroll) * 0.04));
+      opacity: calc(1 - var(--intro-scroll) * 1.08);
     }
 
     .intro-copy {
@@ -417,70 +434,6 @@
       height: 42px;
       background: linear-gradient(var(--line), var(--accent), transparent);
       animation: intro-cue 1600ms ease-in-out infinite;
-    }
-
-    .intro-signals {
-      padding-top: clamp(26px, 4vw, 44px);
-      padding-bottom: clamp(66px, 9vw, 112px);
-      border-top: 1px solid var(--line);
-    }
-
-    .signal-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1px;
-      border: 1px solid var(--line);
-      background: var(--line);
-      overflow: hidden;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .signal {
-      min-height: clamp(156px, 18vw, 232px);
-      padding: clamp(18px, 2.8vw, 30px);
-      background: color-mix(in srgb, var(--surface) 84%, transparent);
-      display: grid;
-      align-content: end;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .signal::before {
-      content: attr(data-index);
-      position: absolute;
-      top: 18px;
-      left: 20px;
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.16em;
-    }
-
-    .signal::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.42;
-      background: linear-gradient(120deg, transparent 0 42%, color-mix(in srgb, var(--text) 8%, transparent) 50%, transparent 58% 100%);
-      transform: translateX(calc(-54% + var(--intro-scroll) * 92%));
-    }
-
-    .signal h2 {
-      margin: 0;
-      font-size: clamp(22px, 2.5vw, 31px);
-      line-height: 1.18;
-      letter-spacing: 0;
-    }
-
-    .signal p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-      overflow-wrap: anywhere;
     }
 
     @keyframes intro-rise {
@@ -1298,6 +1251,10 @@
         padding: 42px 0 58px;
       }
 
+      .intro-stage {
+        min-height: calc(122svh - 68px);
+      }
+
       .intro-mast {
         align-items: flex-start;
         flex-direction: column;
@@ -1315,14 +1272,6 @@
 
       .intro-role {
         font-size: clamp(24px, 8vw, 42px);
-      }
-
-      .intro-signals {
-        padding-top: 18px;
-      }
-
-      .signal-strip {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .hero {
@@ -1447,10 +1396,6 @@
       .focus-list span {
         text-align: left;
       }
-
-      .signal-strip {
-        grid-template-columns: 1fr;
-      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1519,56 +1464,37 @@
   </header>
 
   <main id="top">
-    <section class="intro-hero page-shell" aria-label="文洪宇作品集开场">
-      <div class="intro-mast">
-        <strong>EVAN</strong>
-        <span>AIGC VIDEO × MOTION DESIGN × VISUAL STORYTELLING</span>
-      </div>
-
-      <div class="intro-grid">
-        <div class="intro-copy">
-          <span class="eyebrow">Portfolio 2026</span>
-          <h1>
-            <span class="hero-name">文洪宇</span>
-            <span class="hero-roman">EVAN</span>
-          </h1>
-          <div class="intro-role">AI VIDEO <span>DESIGNER</span></div>
-          <p class="intro-text">把 AI 生成、动态设计和后期合成串成完整视频流程，从创意、分镜、视觉生成到 AE 合成与剪辑，完成适合传播、展映和现场投影的影像作品。</p>
+    <div class="intro-stage" aria-label="文洪宇作品集开场动效">
+      <section class="intro-hero page-shell">
+        <div class="intro-mast">
+          <strong>EVAN</strong>
+          <span>AIGC VIDEO × MOTION DESIGN × VISUAL STORYTELLING</span>
         </div>
-        <aside class="hero-panel" aria-label="能力概览">
-          <span class="kicker">Focus</span>
-          <ul class="focus-list">
-            <li><strong>AIGC 影像</strong><span>Seedance 2.0 / GPT image 2 / LibuTV</span></li>
-            <li><strong>动态视觉</strong><span>After Effects / Motion Graphics</span></li>
-            <li><strong>投影叙事</strong><span>建筑投影 / 空间影像 / 现场节奏</span></li>
-            <li><strong>后期完成</strong><span>剪辑 / 调色 / 升格 / 合成</span></li>
-          </ul>
-        </aside>
-      </div>
 
-      <div class="intro-scroll-cue">Scroll to view works</div>
-    </section>
+        <div class="intro-grid">
+          <div class="intro-copy">
+            <span class="eyebrow">Portfolio 2026</span>
+            <h1>
+              <span class="hero-name">文洪宇</span>
+              <span class="hero-roman">EVAN</span>
+            </h1>
+            <div class="intro-role">AI VIDEO <span>DESIGNER</span></div>
+            <p class="intro-text">把 AI 生成、动态设计和后期合成串成完整视频流程，从创意、分镜、视觉生成到 AE 合成与剪辑，完成适合传播、展映和现场投影的影像作品。</p>
+          </div>
+          <aside class="hero-panel" aria-label="能力概览">
+            <span class="kicker">Focus</span>
+            <ul class="focus-list">
+              <li><strong>AIGC 影像</strong><span>Seedance 2.0 / GPT image 2 / LibuTV</span></li>
+              <li><strong>动态视觉</strong><span>After Effects / Motion Graphics</span></li>
+              <li><strong>投影叙事</strong><span>建筑投影 / 空间影像 / 现场节奏</span></li>
+              <li><strong>后期完成</strong><span>剪辑 / 调色 / 升格 / 合成</span></li>
+            </ul>
+          </aside>
+        </div>
 
-    <section class="intro-signals page-shell" aria-label="能力摘要">
-      <div class="signal-strip">
-        <article class="signal" data-index="01">
-          <h2>AIGC 影像</h2>
-          <p>使用 Seedance 2.0、GPT image 2、LibuTV 等工具，搭建从脚本到画面的生成链路。</p>
-        </article>
-        <article class="signal" data-index="02">
-          <h2>动态视觉</h2>
-          <p>把镜头节奏、图形运动和画面情绪统一到可传播的视频表达里。</p>
-        </article>
-        <article class="signal" data-index="03">
-          <h2>投影叙事</h2>
-          <p>围绕建筑空间、现场节奏和观看动线设计可落地的空间影像。</p>
-        </article>
-        <article class="signal" data-index="04">
-          <h2>后期完成</h2>
-          <p>剪辑、合成、字幕、调色和最终输出，保证项目真正可以交付。</p>
-        </article>
-      </div>
-    </section>
+        <div class="intro-scroll-cue">Scroll to view works</div>
+      </section>
+    </div>
 
     <section class="section page-shell" id="showreel">
       <button class="showreel reveal" type="button" id="showreel-play" aria-label="播放 2026 作品集混剪">
