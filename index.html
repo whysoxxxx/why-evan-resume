@@ -359,8 +359,8 @@
     .intro-grid {
       align-self: center;
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.72fr);
-      gap: clamp(34px, 6vw, 78px);
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.56fr);
+      gap: clamp(28px, 5vw, 62px);
       align-items: end;
       transform:
         translateY(calc(var(--intro-scroll) * -20px))
@@ -394,7 +394,7 @@
       flex-wrap: wrap;
       gap: 10px 16px;
       color: var(--text);
-      font-size: clamp(24px, 4.2vw, 56px);
+      font-size: clamp(24px, 3.9vw, 50px);
       line-height: 1.06;
       font-weight: 900;
       letter-spacing: 0;
@@ -406,13 +406,177 @@
     }
 
     .intro-text {
-      max-width: 780px;
+      max-width: 700px;
       margin: 0;
       color: var(--muted);
-      font-size: clamp(18px, 2vw, 24px);
+      font-size: clamp(17px, 1.8vw, 22px);
       line-height: 1.75;
       overflow-wrap: anywhere;
       animation: intro-fade 900ms 420ms ease both;
+    }
+
+    .profile-panel {
+      justify-self: end;
+      width: min(100%, 360px);
+      display: grid;
+      gap: 16px;
+      perspective: 900px;
+      animation: intro-fade 900ms 520ms ease both;
+    }
+
+    .profile-card {
+      --pc-x: 50%;
+      --pc-y: 50%;
+      --pc-rotate-x: 0deg;
+      --pc-rotate-y: 0deg;
+      position: relative;
+      min-height: clamp(430px, 46vw, 560px);
+      border-radius: 28px;
+      overflow: hidden;
+      isolation: isolate;
+      border: 1px solid color-mix(in srgb, var(--line) 80%, var(--accent) 20%);
+      background:
+        radial-gradient(circle at var(--pc-x) var(--pc-y), color-mix(in srgb, var(--accent) 18%, transparent), transparent 30%),
+        linear-gradient(165deg, color-mix(in srgb, var(--accent) 16%, transparent), color-mix(in srgb, var(--accent-2) 10%, transparent) 52%, transparent),
+        color-mix(in srgb, var(--surface) 94%, var(--accent) 6%);
+      box-shadow: 0 28px 92px color-mix(in srgb, var(--accent) 13%, rgba(0, 0, 0, 0.38));
+      transform: rotateX(var(--pc-rotate-y)) rotateY(var(--pc-rotate-x)) translateZ(0);
+      transition: transform 360ms var(--ease-out), border-color 220ms ease, box-shadow 320ms var(--ease-out);
+      will-change: transform;
+    }
+
+    .profile-card:hover,
+    .profile-card:focus-visible {
+      border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
+      box-shadow: 0 34px 110px color-mix(in srgb, var(--accent) 20%, rgba(0, 0, 0, 0.38));
+      outline: none;
+    }
+
+    .profile-card::before,
+    .profile-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .profile-card::before {
+      opacity: 0.62;
+      background:
+        linear-gradient(180deg, transparent 42%, color-mix(in srgb, var(--bg) 92%, transparent) 100%),
+        radial-gradient(circle at var(--pc-x) var(--pc-y), rgba(255,255,255,0.28), transparent 26%);
+      mix-blend-mode: soft-light;
+    }
+
+    .profile-card::after {
+      opacity: 0;
+      transition: opacity 240ms ease;
+      background: linear-gradient(
+        120deg,
+        transparent 18%,
+        color-mix(in srgb, var(--accent-2) 28%, transparent) 42%,
+        color-mix(in srgb, var(--accent) 30%, transparent) 55%,
+        transparent 78%
+      );
+      mask-image: radial-gradient(circle at var(--pc-x) var(--pc-y), black, transparent 42%);
+      mix-blend-mode: screen;
+    }
+
+    .profile-card:hover::after,
+    .profile-card:focus-visible::after {
+      opacity: 0.72;
+    }
+
+    .profile-card-pattern {
+      position: absolute;
+      inset: -20% -38%;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, max-content);
+      gap: 46px 58px;
+      align-content: center;
+      justify-content: center;
+      transform: rotate(-45deg);
+      opacity: 0.085;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .profile-card-pattern span {
+      color: var(--text);
+      font-size: clamp(34px, 5vw, 58px);
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .profile-topline {
+      position: absolute;
+      top: 28px;
+      left: 26px;
+      right: 26px;
+      z-index: 5;
+      display: block;
+      font-size: clamp(30px, 4.7vw, 54px);
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: transparent;
+      background: linear-gradient(100deg, var(--accent) 0%, var(--accent-2) 48%, #f6f3ee 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: 0 18px 52px color-mix(in srgb, var(--accent) 24%, transparent);
+    }
+
+    .profile-portrait {
+      position: absolute;
+      left: 50%;
+      bottom: -3%;
+      z-index: 3;
+      width: min(116%, 470px);
+      height: 88%;
+      object-fit: cover;
+      object-position: 50% 18%;
+      transform: translateX(-50%);
+      filter: saturate(1.03) contrast(1.02);
+      opacity: 0.92;
+    }
+
+    .profile-focus {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .profile-focus li {
+      min-height: 58px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: color-mix(in srgb, var(--surface) 72%, transparent);
+      display: grid;
+      align-content: center;
+      gap: 2px;
+    }
+
+    .profile-focus strong {
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .profile-focus span {
+      color: var(--dim);
+      font-size: 11px;
+      line-height: 1.35;
     }
 
     .intro-scroll-cue {
@@ -688,19 +852,22 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(0deg, rgba(9,9,11,0.82), transparent 45%), linear-gradient(90deg, rgba(9,9,11,0.5), transparent 58%);
+      background: linear-gradient(0deg, rgba(9,9,11,0.82), transparent 45%), linear-gradient(270deg, rgba(9,9,11,0.58), transparent 58%);
       z-index: 1;
     }
 
     .showreel-content {
       position: absolute;
-      inset: auto 28px 28px 28px;
+      inset: auto 28px 28px auto;
+      width: min(420px, calc(100% - 56px));
       z-index: 2;
       display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 24px;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 20px;
       color: #f6f3ee;
+      text-align: right;
     }
 
     .play-badge {
@@ -1266,6 +1433,20 @@
         align-items: start;
       }
 
+      .profile-panel {
+        justify-self: stretch;
+        width: 100%;
+        max-width: 520px;
+      }
+
+      .profile-card {
+        min-height: 500px;
+      }
+
+      .profile-focus {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
       .intro-hero h1 {
         font-size: clamp(58px, 19vw, 118px);
       }
@@ -1343,9 +1524,11 @@
       }
 
       .showreel-content {
-        inset: auto 18px 18px 18px;
-        align-items: start;
+        inset: auto 18px 18px auto;
+        width: min(330px, calc(100% - 36px));
+        align-items: flex-end;
         flex-direction: column;
+        text-align: right;
       }
 
       .play-badge {
@@ -1396,6 +1579,28 @@
       .focus-list span {
         text-align: left;
       }
+
+      .profile-card {
+        min-height: 430px;
+        border-radius: 22px;
+      }
+
+      .profile-topline {
+        top: 22px;
+        left: 20px;
+        right: 20px;
+        font-size: clamp(30px, 11vw, 48px);
+      }
+
+      .profile-portrait {
+        width: min(122%, 460px);
+        height: 86%;
+        object-position: 50% 20%;
+      }
+
+      .profile-focus {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1434,6 +1639,7 @@
       .case-card:hover,
       .showreel:hover,
       .hero-panel:hover,
+      .profile-card:hover,
       .button:hover,
       .skill:hover {
         transform: none;
@@ -1481,13 +1687,23 @@
             <div class="intro-role">AI VIDEO <span>DESIGNER</span></div>
             <p class="intro-text">把 AI 生成、动态设计和后期合成串成完整视频流程，从创意、分镜、视觉生成到 AE 合成与剪辑，完成适合传播、展映和现场投影的影像作品。</p>
           </div>
-          <aside class="hero-panel" aria-label="能力概览">
-            <span class="kicker">Focus</span>
-            <ul class="focus-list">
-              <li><strong>AIGC 影像</strong><span>Seedance 2.0 / GPT image 2 / LibuTV</span></li>
-              <li><strong>动态视觉</strong><span>After Effects / Motion Graphics</span></li>
-              <li><strong>投影叙事</strong><span>建筑投影 / 空间影像 / 现场节奏</span></li>
-              <li><strong>后期完成</strong><span>剪辑 / 调色 / 升格 / 合成</span></li>
+          <aside class="profile-panel" aria-label="个人名片">
+            <div class="profile-card">
+              <div class="profile-card-pattern" aria-hidden="true">
+                <span>AIGC</span><span>AIGC</span><span>AIGC</span><span>AIGC</span>
+                <span>AIGC</span><span>AIGC</span><span>AIGC</span><span>AIGC</span>
+                <span>AIGC</span><span>AIGC</span><span>AIGC</span><span>AIGC</span>
+                <span>AIGC</span><span>AIGC</span><span>AIGC</span><span>AIGC</span>
+                <span>AIGC</span><span>AIGC</span><span>AIGC</span><span>AIGC</span>
+              </div>
+              <span class="profile-topline">Open to Work</span>
+              <img class="profile-portrait" src="./assets/tx.png" alt="" width="1224" height="1224" aria-hidden="true">
+            </div>
+            <ul class="profile-focus">
+              <li><strong>AIGC 影像</strong><span>生成链路</span></li>
+              <li><strong>动态视觉</strong><span>AE 合成</span></li>
+              <li><strong>投影叙事</strong><span>空间影像</span></li>
+              <li><strong>后期完成</strong><span>剪辑调色</span></li>
             </ul>
           </aside>
         </div>
@@ -1580,8 +1796,8 @@
               <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ4qw9QRnVr9Ii9Hf0NJfY7WxRTyRjKqiyd-ZiTQ_wjgUc6lCymqK7pz4cLdVoehCW3FbEIiI4EW3ptjZgoQw_SgO5L4d5qkwMumR6gWnQFIwzRnG8NbOLA0Oes2xXPgat6maT8LYqmMIq9n0-iDxMD6rW_AH6gReivx9Ah8NopR4d1LNuEhUqLqfODVp2KMXLn7kAVnbv39nwljV597NVQRy2bDLvxgfhXWFPsbGqYuj7oXhI-Bs9DparfGFfG0Kr8Eo1cfLdgg" alt="作品 05 封面" width="900" height="1200">
             </div>
             <div class="work-meta">
-              <h3>《Kill Them All》AI短片</h3>
-              <p>个人导演的AI短片，全流程独立完成。</p>
+              <h3>《凤还巢》AI短片</h3>
+              <p>AI 古风真人短片，独立搭建工作流，从分镜到成片。</p>
               <div class="tag-row">
                 <span class="tag">AI Workflow</span>
                 <span class="tag">AIGC</span>
@@ -1780,6 +1996,7 @@
     const themeMeta = document.querySelector('meta[name="theme-color"]');
     const bilibiliPlayerUrl = (bvid) => `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(bvid)}&page=1&high_quality=1&autoplay=1`;
     const canUseMotion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const profileCard = document.querySelector(".profile-card");
     let lastVideoTrigger = showreelPlay;
     let cursorFrame = 0;
     let cursorX = window.innerWidth * 0.5;
@@ -1905,6 +2122,31 @@
       root.dataset.theme = savedTheme;
       themeButton.textContent = savedTheme === "dark" ? "☼" : "☾";
       themeMeta?.setAttribute("content", savedTheme === "dark" ? "#09090b" : "#f4f0e8");
+    }
+
+    if (profileCard && canUseMotion && window.matchMedia("(hover: hover)").matches) {
+      const resetProfileCard = () => {
+        profileCard.style.setProperty("--pc-x", "50%");
+        profileCard.style.setProperty("--pc-y", "50%");
+        profileCard.style.setProperty("--pc-rotate-x", "0deg");
+        profileCard.style.setProperty("--pc-rotate-y", "0deg");
+      };
+
+      profileCard.addEventListener("pointermove", (event) => {
+        const rect = profileCard.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        const rotateX = (50 - x) * 0.1;
+        const rotateY = (y - 50) * 0.075;
+
+        profileCard.style.setProperty("--pc-x", `${x.toFixed(2)}%`);
+        profileCard.style.setProperty("--pc-y", `${y.toFixed(2)}%`);
+        profileCard.style.setProperty("--pc-rotate-x", `${rotateX.toFixed(2)}deg`);
+        profileCard.style.setProperty("--pc-rotate-y", `${rotateY.toFixed(2)}deg`);
+      });
+
+      profileCard.addEventListener("pointerleave", resetProfileCard);
+      profileCard.addEventListener("blur", resetProfileCard);
     }
 
     const openVideo = (trigger, title, bvid) => {
