@@ -27,10 +27,6 @@
       --ambient-a: rgba(167, 139, 250, 0.18);
       --ambient-b: rgba(110, 231, 183, 0.1);
       --ambient-c: rgba(56, 189, 248, 0.08);
-      --cursor-light: rgba(167, 139, 250, 0.22);
-      --cursor-light-2: rgba(110, 231, 183, 0.12);
-      --cursor-x: 50vw;
-      --cursor-y: 34vh;
       --intro-scroll: 0;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -55,8 +51,6 @@
       --ambient-a: rgba(104, 65, 200, 0.1);
       --ambient-b: rgba(4, 120, 87, 0.07);
       --ambient-c: rgba(14, 116, 144, 0.06);
-      --cursor-light: rgba(104, 65, 200, 0.14);
-      --cursor-light-2: rgba(4, 120, 87, 0.08);
     }
 
     * {
@@ -100,8 +94,7 @@
       transform: translate3d(calc(var(--intro-scroll) * -18px), calc(var(--intro-scroll) * 12px), 0);
     }
 
-    .ambient-field,
-    .cursor-light {
+    .ambient-field {
       position: fixed;
       inset: 0;
       pointer-events: none;
@@ -154,22 +147,118 @@
       animation: ambient-drift-b 48s var(--ease-soft) infinite alternate;
     }
 
-    .cursor-light {
-      width: 34rem;
-      height: 34rem;
-      inset: auto;
-      left: 0;
-      top: 0;
-      border-radius: 999px;
-      opacity: 0;
-      transform: translate3d(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%), 0);
-      transition: opacity 320ms ease;
-      will-change: transform, opacity;
-      background: radial-gradient(circle, var(--cursor-light) 0%, var(--cursor-light-2) 34%, transparent 68%);
+    .page-progress {
+      --page-scroll-progress: 0;
+      position: fixed;
+      left: clamp(12px, 2vw, 30px);
+      top: 50%;
+      z-index: 30;
+      display: grid;
+      gap: 36px;
+      padding: 22px 0;
+      transform: translateY(-50%);
     }
 
-    body.pointer-active .cursor-light {
+    .page-progress-track {
+      position: absolute;
+      left: 10px;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      border-radius: 999px;
+      background:
+        linear-gradient(
+          180deg,
+          transparent 0%,
+          color-mix(in srgb, var(--accent-2) 20%, rgba(255, 255, 255, 0.08)) 12%,
+          color-mix(in srgb, var(--accent) 16%, rgba(255, 255, 255, 0.1)) 50%,
+          color-mix(in srgb, var(--accent-2) 18%, rgba(255, 255, 255, 0.08)) 88%,
+          transparent 100%
+        );
       opacity: 1;
+      overflow: hidden;
+      filter: none;
+      mask-image: linear-gradient(180deg, transparent 0%, black 14%, black 86%, transparent 100%);
+    }
+
+    .page-progress-track span {
+      display: block;
+      width: 100%;
+      height: calc(var(--page-scroll-progress) * 100%);
+      border-radius: inherit;
+      background:
+        linear-gradient(
+          180deg,
+          transparent 0%,
+          color-mix(in srgb, var(--accent-2) 76%, white) 16%,
+          color-mix(in srgb, var(--accent) 60%, white) 76%,
+          transparent 100%
+        );
+      box-shadow:
+        0 0 8px color-mix(in srgb, var(--accent-2) 34%, transparent),
+        0 0 14px color-mix(in srgb, var(--accent) 20%, transparent);
+    }
+
+    .page-progress a {
+      position: relative;
+      width: 42px;
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      font-size: 0;
+      font-weight: 800;
+      text-transform: uppercase;
+      transition: color 260ms ease, opacity 260ms ease, filter 260ms ease, transform 260ms var(--ease-out);
+    }
+
+    .page-progress a::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      width: 2px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      filter: none;
+      transform: translateY(-50%);
+      transition: width 260ms ease, height 260ms ease, opacity 260ms ease, filter 260ms ease, box-shadow 260ms ease, transform 260ms var(--ease-out);
+    }
+
+    .page-progress a.is-active {
+      transform: translateX(1px);
+    }
+
+    .page-progress a.is-active::before {
+      width: 2px;
+      height: 58px;
+      opacity: 0;
+      filter: none;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow:
+        0 0 10px rgba(255, 255, 255, 0.32),
+        0 0 18px color-mix(in srgb, var(--accent-2) 22%, transparent);
+      transform: translateY(-50%) scaleY(1.1);
+    }
+
+    .page-progress:hover a,
+    .page-progress:focus-within a {
+      filter: none;
+    }
+
+    .page-progress:hover a::before,
+    .page-progress:focus-within a::before {
+      opacity: 0;
+      filter: none;
+    }
+
+    .page-progress:hover a.is-active::before,
+    .page-progress:focus-within a.is-active::before {
+      opacity: 0;
+      filter: none;
     }
 
     @keyframes ambient-drift-a {
@@ -289,7 +378,7 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      opacity: 0.72;
+      opacity: 0.62;
       mix-blend-mode: screen;
     }
 
@@ -299,7 +388,7 @@
     }
 
     .intro-stage {
-      min-height: calc(128svh - 78px);
+      min-height: calc(112svh - 78px);
       position: relative;
       z-index: 1;
     }
@@ -307,11 +396,11 @@
     .intro-hero {
       position: sticky;
       top: 78px;
-      min-height: calc(100svh - 78px);
+      min-height: calc(94svh - 78px);
       display: grid;
       grid-template-rows: auto 1fr auto;
-      gap: clamp(28px, 5vw, 64px);
-      padding: clamp(34px, 6vw, 76px) 0 clamp(44px, 7vw, 92px);
+      gap: clamp(20px, 3.6vw, 44px);
+      padding: clamp(30px, 5vw, 62px) 0 clamp(28px, 4.5vw, 58px);
       isolation: isolate;
       transform: translateY(calc(var(--intro-scroll) * -7vh));
     }
@@ -334,7 +423,7 @@
     .intro-mast {
       display: flex;
       align-items: baseline;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 24px;
       color: var(--dim);
       font-size: 12px;
@@ -359,9 +448,9 @@
     .intro-grid {
       align-self: center;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.56fr);
+      grid-template-columns: minmax(0, 1fr) minmax(420px, 0.72fr);
       gap: clamp(28px, 5vw, 62px);
-      align-items: end;
+      align-items: start;
       transform:
         translateY(calc(var(--intro-scroll) * -20px))
         scale(calc(1 - var(--intro-scroll) * 0.04));
@@ -370,7 +459,8 @@
 
     .intro-copy {
       display: grid;
-      gap: clamp(18px, 3vw, 30px);
+      gap: clamp(14px, 2.2vw, 24px);
+      align-content: start;
     }
 
     .intro-hero h1 {
@@ -417,7 +507,7 @@
 
     .profile-panel {
       justify-self: end;
-      width: min(100%, 360px);
+      width: min(100%, 520px);
       display: grid;
       gap: 16px;
       perspective: 900px;
@@ -526,11 +616,8 @@
       line-height: 0.95;
       letter-spacing: -0.03em;
       text-transform: uppercase;
-      color: transparent;
-      background: linear-gradient(100deg, var(--accent) 0%, var(--accent-2) 48%, #f6f3ee 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      text-shadow: 0 18px 52px color-mix(in srgb, var(--accent) 24%, transparent);
+      color: #f6f3ee;
+      text-shadow: 0 18px 52px rgba(246, 243, 238, 0.16);
     }
 
     .profile-portrait {
@@ -549,7 +636,7 @@
 
     .profile-focus {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
       margin: 0;
       padding: 0;
@@ -560,7 +647,7 @@
       min-height: 58px;
       border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 10px 12px;
+      padding: 10px;
       background: color-mix(in srgb, var(--surface) 72%, transparent);
       display: grid;
       align-content: center;
@@ -813,6 +900,25 @@
       overflow-wrap: anywhere;
     }
 
+    .works-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 34px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .works-title-row h2 {
+      margin: 0;
+    }
+
+    .works-count {
+      color: var(--muted);
+      text-align: left;
+      margin: 0;
+      font-size: 15px;
+    }
+
     .showreel {
       display: grid;
       grid-template-columns: 1fr;
@@ -976,6 +1082,7 @@
     }
 
     .works-rail-wrap {
+      --works-scroll-progress: 0;
       position: relative;
       margin-inline: calc((100vw - min(calc(100vw - 48px), var(--max))) / -2);
       padding-inline: calc((100vw - min(calc(100vw - 48px), var(--max))) / 2);
@@ -1005,7 +1112,30 @@
       scroll-snap-type: x mandatory;
       overscroll-behavior-x: contain;
       scrollbar-width: thin;
-      scrollbar-color: var(--surface-3) transparent;
+      scrollbar-color: color-mix(in srgb, var(--accent) 34%, transparent) transparent;
+    }
+
+    .works-grid::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .works-grid::-webkit-scrollbar-track {
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 4%, transparent);
+    }
+
+    .works-grid::-webkit-scrollbar-thumb {
+      min-width: 80px;
+      border: 3px solid transparent;
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--accent-2) 44%, transparent), color-mix(in srgb, var(--accent) 42%, transparent)) border-box,
+        color-mix(in srgb, var(--accent) 18%, transparent) padding-box;
+      box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    .works-scroll-progress {
+      display: none;
     }
 
     .work-card {
@@ -1382,6 +1512,28 @@
         width: min(calc(100% - 32px), var(--max));
       }
 
+      .page-progress {
+        left: 6px;
+        gap: 28px;
+      }
+
+      .page-progress-track {
+        left: 10px;
+        width: 2px;
+      }
+
+      .page-progress a {
+        width: 24px;
+        min-height: 26px;
+        padding-left: 24px;
+        color: transparent;
+        font-size: 0;
+      }
+
+      .page-progress a::before {
+        left: 10px;
+      }
+
       .topbar-inner {
         min-height: 68px;
         gap: 12px;
@@ -1414,12 +1566,12 @@
       }
 
       .intro-hero {
-        min-height: calc(100svh - 68px);
-        padding: 42px 0 58px;
+        min-height: calc(92svh - 68px);
+        padding: 34px 0 42px;
       }
 
       .intro-stage {
-        min-height: calc(122svh - 68px);
+        min-height: calc(108svh - 68px);
       }
 
       .intro-mast {
@@ -1482,6 +1634,10 @@
         grid-template-columns: 1fr;
       }
 
+      .works-count {
+        justify-self: start;
+      }
+
       .hero-panel {
         margin-top: 24px;
       }
@@ -1509,6 +1665,33 @@
 
       .works-grid {
         grid-auto-columns: min(82vw, 360px);
+        padding-bottom: 28px;
+        scrollbar-width: none;
+      }
+
+      .works-grid::-webkit-scrollbar {
+        display: none;
+      }
+
+      .works-scroll-progress {
+        display: block;
+        width: min(42vw, 170px);
+        height: 18px;
+        margin: -6px 0 0;
+        position: relative;
+      }
+
+      .works-scroll-progress span {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        opacity: 0.72;
+        background: radial-gradient(circle, var(--accent-2) 0 24%, color-mix(in srgb, var(--accent) 74%, transparent) 46%, transparent 72%);
+        box-shadow: 0 0 18px color-mix(in srgb, var(--accent-2) 50%, transparent);
+        transform: translateX(calc(var(--works-scroll-progress) * (min(42vw, 170px) - 18px)));
       }
 
       .work-meta {
@@ -1581,7 +1764,8 @@
       }
 
       .profile-card {
-        min-height: 430px;
+        min-height: min(116vw, 560px);
+        aspect-ratio: 0.72;
         border-radius: 22px;
       }
 
@@ -1593,9 +1777,12 @@
       }
 
       .profile-portrait {
-        width: min(122%, 460px);
-        height: 86%;
-        object-position: 50% 20%;
+        left: 50%;
+        bottom: 2%;
+        width: min(92%, 380px);
+        height: 78%;
+        object-fit: contain;
+        object-position: 50% 100%;
       }
 
       .profile-focus {
@@ -1609,8 +1796,7 @@
       }
 
       #agent-field,
-      .ambient-field,
-      .cursor-light {
+      .ambient-field {
         display: none;
       }
 
@@ -1631,10 +1817,6 @@
     }
 
     @media (hover: none), (pointer: coarse) {
-      .cursor-light {
-        display: none;
-      }
-
       .work-card:hover,
       .case-card:hover,
       .showreel:hover,
@@ -1650,7 +1832,15 @@
 <body>
   <canvas id="agent-field" aria-hidden="true"></canvas>
   <div class="ambient-field" aria-hidden="true"></div>
-  <div class="cursor-light" aria-hidden="true"></div>
+  <nav class="page-progress" aria-label="页面跳转进度">
+    <span class="page-progress-track" aria-hidden="true"><span></span></span>
+    <a href="#top" data-progress-link>开场</a>
+    <a href="#showreel" data-progress-link>总览</a>
+    <a href="#works" data-progress-link>作品</a>
+    <a href="#workflow" data-progress-link>流程</a>
+    <a href="#cases" data-progress-link>案例</a>
+    <a href="#contact" data-progress-link>联系</a>
+  </nav>
   <header class="topbar">
     <div class="page-shell topbar-inner">
       <a class="brand" href="#top" aria-label="回到首页">
@@ -1673,7 +1863,6 @@
     <div class="intro-stage" aria-label="文洪宇作品集开场动效">
       <section class="intro-hero page-shell">
         <div class="intro-mast">
-          <strong>EVAN</strong>
           <span>AIGC VIDEO × MOTION DESIGN × VISUAL STORYTELLING</span>
         </div>
 
@@ -1730,7 +1919,10 @@
       <div class="section-head reveal">
         <div>
           <span class="kicker">Selected Works</span>
-          <h2>作品集</h2>
+          <div class="works-title-row">
+            <h2>作品集</h2>
+            <p class="section-note works-count">6 项 AI 相关作品</p>
+          </div>
         </div>
       </div>
 
@@ -1780,7 +1972,7 @@
 
           <article class="work-card reveal playable-card" role="button" tabindex="0" data-video-title="海外真人短剧" data-bvid="BV1oYGX6CEao">
             <div class="work-media">
-              <img loading="lazy" src="./assets/海外.jpg" alt="海外真人短剧封面" width="1200" height="900">
+              <img loading="lazy" src="./assets/hw.jpg" alt="海外真人短剧封面" width="1200" height="900">
             </div>
             <div class="work-meta">
               <h3>海外真人短剧</h3>
@@ -1793,7 +1985,7 @@
 
           <article class="work-card reveal">
             <div class="work-media">
-              <img loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ4qw9QRnVr9Ii9Hf0NJfY7WxRTyRjKqiyd-ZiTQ_wjgUc6lCymqK7pz4cLdVoehCW3FbEIiI4EW3ptjZgoQw_SgO5L4d5qkwMumR6gWnQFIwzRnG8NbOLA0Oes2xXPgat6maT8LYqmMIq9n0-iDxMD6rW_AH6gReivx9Ah8NopR4d1LNuEhUqLqfODVp2KMXLn7kAVnbv39nwljV597NVQRy2bDLvxgfhXWFPsbGqYuj7oXhI-Bs9DparfGFfG0Kr8Eo1cfLdgg" alt="作品 05 封面" width="900" height="1200">
+              <img loading="lazy" src="./assets/fhc.png" alt="《凤还巢》AI短片封面" width="1200" height="900">
             </div>
             <div class="work-meta">
               <h3>《凤还巢》AI短片</h3>
@@ -1805,20 +1997,21 @@
             </div>
           </article>
 
-          <article class="work-card reveal playable-card" role="button" tabindex="0" data-video-title="Vibe Coding" data-bvid="BV1VkV46iEK4">
+          <article class="work-card reveal playable-card" role="button" tabindex="0" data-video-title="《一期生》AI短片" data-bvid="BV1VkV46iEK4">
             <div class="work-media">
-              <img loading="lazy" src="./assets/剧本工坊.jpg" alt="Vibe Coding 封面" width="1200" height="900">
+              <img loading="lazy" src="./assets/剧本工坊.jpg" alt="《一期生》AI短片封面" width="1200" height="900">
             </div>
             <div class="work-meta">
-              <h3>Vibe Coding</h3>
-              <p>聚焦项目中最紧迫的问题，通过快速开发、功能复用与结构优化，将解决方案沉淀为可持续迭代的产品。</p>
+              <h3>《一期生》AI短片</h3>
+              <p>与AI配合搭建的工作流，从想法到成片的过程逐渐成熟。</p>
               <div class="tag-row">
-                <span class="tag">Rapid Prototyping</span>
-                <span class="tag">Product Thinking</span>
+                <span class="tag">AI Video</span>
+                <span class="tag">AI Workflow</span>
               </div>
             </div>
           </article>
         </div>
+        <div class="works-scroll-progress" aria-hidden="true"><span></span></div>
       </div>
     </section>
 
@@ -1926,7 +2119,7 @@
       <div class="about-grid">
         <div class="reveal">
           <span class="kicker">Technical Palette</span>
-          <h2>熟练的技能</h2>
+          <h2>熟练技能</h2>
           <div class="skill-list" aria-label="技能标签">
             <span class="skill">After Effects</span>
             <span class="skill">Premiere Pro</span>
@@ -1997,21 +2190,17 @@
     const bilibiliPlayerUrl = (bvid) => `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(bvid)}&page=1&high_quality=1&autoplay=1`;
     const canUseMotion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const profileCard = document.querySelector(".profile-card");
+    const pageProgress = document.querySelector(".page-progress");
+    const progressLinks = Array.from(document.querySelectorAll("[data-progress-link]"));
+    const progressTargets = progressLinks.map((link) => ({
+      link,
+      target: document.querySelector(link.getAttribute("href"))
+    }));
+    const worksRailWrap = document.querySelector(".works-rail-wrap");
+    const worksGrid = document.querySelector(".works-grid");
     let lastVideoTrigger = showreelPlay;
-    let cursorFrame = 0;
-    let cursorX = window.innerWidth * 0.5;
-    let cursorY = window.innerHeight * 0.34;
     const agentCanvas = document.querySelector("#agent-field");
-    const agentCtx = agentCanvas?.getContext("2d");
-    let agentWidth = 0;
-    let agentHeight = 0;
-    let agentDpr = 1;
-    let agentTargetX = window.innerWidth * 0.5;
-    let agentTargetY = window.innerHeight * 0.38;
-    let agentCursorX = agentTargetX;
-    let agentCursorY = agentTargetY;
-    let agentNodes = [];
-    let lastAgentDrawAt = 0;
+    let agentParticles = null;
 
     const updateIntroScroll = () => {
       const max = Math.max(1, window.innerHeight * 0.82);
@@ -2019,80 +2208,213 @@
       root.style.setProperty("--intro-scroll", progress.toFixed(4));
     };
 
-    const resizeAgentField = () => {
-      if (!agentCtx || !agentCanvas) return;
+    const updatePageProgress = () => {
+      if (!pageProgress) return;
 
-      agentDpr = Math.min(window.devicePixelRatio || 1, 2);
-      agentWidth = window.innerWidth;
-      agentHeight = window.innerHeight;
-      agentCanvas.width = Math.floor(agentWidth * agentDpr);
-      agentCanvas.height = Math.floor(agentHeight * agentDpr);
-      agentCanvas.style.width = `${agentWidth}px`;
-      agentCanvas.style.height = `${agentHeight}px`;
-      agentCtx.setTransform(agentDpr, 0, 0, agentDpr, 0, 0);
+      const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const pageProgressValue = Math.min(Math.max(window.scrollY / scrollable, 0), 1);
+      const marker = window.scrollY + window.innerHeight * 0.42;
+      let activeItem = progressTargets[0];
 
-      const nodeCount = Math.max(16, Math.min(30, Math.round(agentWidth / 50)));
-      agentNodes = Array.from({ length: nodeCount }, (_, index) => ({
-        x: (index * 127) % agentWidth,
-        y: (index * 83) % agentHeight,
-        r: 1.2 + ((index * 7) % 20) / 10,
-        vx: -0.08 + ((index * 13) % 16) / 100,
-        vy: -0.05 + ((index * 17) % 12) / 120,
-        hue: index % 3
-      }));
-    };
-
-    const drawAgentField = (now = 0) => {
-      if (!agentCtx) return;
-
-      if (now - lastAgentDrawAt < 33) {
-        requestAnimationFrame(drawAgentField);
-        return;
-      }
-
-      lastAgentDrawAt = now;
-      agentCtx.clearRect(0, 0, agentWidth, agentHeight);
-      agentCursorX += (agentTargetX - agentCursorX) * 0.08;
-      agentCursorY += (agentTargetY - agentCursorY) * 0.08;
-
-      agentNodes.forEach((node) => {
-        node.x += node.vx;
-        node.y += node.vy;
-
-        if (node.x < -20) node.x = agentWidth + 20;
-        if (node.x > agentWidth + 20) node.x = -20;
-        if (node.y < -20) node.y = agentHeight + 20;
-        if (node.y > agentHeight + 20) node.y = -20;
-
-        const dx = node.x - agentCursorX;
-        const dy = node.y - agentCursorY;
-        const distance = Math.hypot(dx, dy);
-        const pull = Math.max(0, 1 - distance / 260);
-        const color = node.hue === 0 ? "167, 139, 250" : node.hue === 1 ? "110, 231, 183" : "125, 211, 252";
-
-        agentCtx.beginPath();
-        agentCtx.fillStyle = `rgba(${color}, ${0.16 + pull * 0.32})`;
-        agentCtx.arc(node.x + dx * pull * -0.018, node.y + dy * pull * -0.018, node.r + pull * 1.4, 0, Math.PI * 2);
-        agentCtx.fill();
+      progressTargets.forEach((item) => {
+        if (item.target && item.target.offsetTop <= marker) {
+          activeItem = item;
+        }
       });
 
-      for (let i = 0; i < agentNodes.length; i += 1) {
-        for (let j = i + 1; j < agentNodes.length; j += 1) {
-          const node = agentNodes[i];
-          const other = agentNodes[j];
-          const linkDistance = Math.hypot(node.x - other.x, node.y - other.y);
-          if (linkDistance < 118) {
-            agentCtx.beginPath();
-            agentCtx.strokeStyle = `rgba(167, 139, 250, ${0.035 * (1 - linkDistance / 118)})`;
-            agentCtx.lineWidth = 1;
-            agentCtx.moveTo(node.x, node.y);
-            agentCtx.lineTo(other.x, other.y);
-            agentCtx.stroke();
-          }
+      pageProgress.style.setProperty("--page-scroll-progress", pageProgressValue.toFixed(4));
+      progressTargets.forEach((item) => {
+        item.link.classList.toggle("is-active", item === activeItem);
+      });
+    };
+
+    const updateWorksScroll = () => {
+      if (!worksGrid || !worksRailWrap) return;
+
+      const max = Math.max(1, worksGrid.scrollWidth - worksGrid.clientWidth);
+      const progress = Math.min(Math.max(worksGrid.scrollLeft / max, 0), 1);
+      worksRailWrap.style.setProperty("--works-scroll-progress", progress.toFixed(4));
+    };
+
+    const updateScrollState = () => {
+      updateIntroScroll();
+      updatePageProgress();
+    };
+
+    const hexToRgb = (hex) => {
+      const value = hex.replace(/^#/, "");
+      const full = value.length === 3 ? value.split("").map((char) => char + char).join("") : value;
+      const int = parseInt(full, 16);
+      return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
+    };
+
+    const createAgentParticles = () => {
+      if (!agentCanvas || !canUseMotion) return null;
+
+      const gl = agentCanvas.getContext("webgl", {
+        alpha: true,
+        depth: false,
+        antialias: false,
+        premultipliedAlpha: false
+      });
+      if (!gl) return null;
+
+      const vertexSource = `
+        attribute vec3 aPosition;
+        attribute vec4 aRandom;
+        attribute vec3 aColor;
+
+        uniform float uTime;
+        uniform float uBaseSize;
+        uniform float uPixelRatio;
+
+        varying vec4 vRandom;
+        varying vec3 vColor;
+
+        void main() {
+          vRandom = aRandom;
+          vColor = aColor;
+
+          vec3 pos = aPosition;
+          float t = uTime;
+          float angle = t * 0.015;
+          mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+          pos.xy = rot * pos.xy;
+
+          pos.x += sin(t * aRandom.z + 6.2831 * aRandom.w) * mix(0.012, 0.08, aRandom.x);
+          pos.y += sin(t * aRandom.y + 6.2831 * aRandom.x) * mix(0.012, 0.08, aRandom.w);
+          pos.z += sin(t * aRandom.w + 6.2831 * aRandom.y) * 0.06;
+
+          gl_PointSize = uBaseSize * uPixelRatio * (0.55 + aRandom.x * 0.75) * (1.0 + pos.z * 0.12);
+          gl_Position = vec4(pos.xy, 0.0, 1.0);
         }
+      `;
+
+      const fragmentSource = `
+        precision highp float;
+
+        uniform float uTime;
+        varying vec4 vRandom;
+        varying vec3 vColor;
+
+        void main() {
+          vec2 uv = gl_PointCoord.xy;
+          float d = length(uv - vec2(0.5));
+          float circle = smoothstep(0.5, 0.14, d);
+          if (circle <= 0.01) discard;
+
+          vec3 shimmer = 0.09 * sin(vec3(uv.y, uv.x, uv.y + uv.x) * 4.0 + uTime + vRandom.y * 6.2831);
+          float alpha = circle * 0.22;
+          gl_FragColor = vec4(vColor + shimmer, alpha);
+        }
+      `;
+
+      const compileShader = (type, source) => {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          console.warn(gl.getShaderInfoLog(shader));
+          gl.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      };
+
+      const vertexShader = compileShader(gl.VERTEX_SHADER, vertexSource);
+      const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentSource);
+      if (!vertexShader || !fragmentShader) return null;
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.warn(gl.getProgramInfoLog(program));
+        return null;
       }
 
-      requestAnimationFrame(drawAgentField);
+      const count = window.innerWidth < 700 ? 70 : 110;
+      const palette = ["#6ee7b7", "#a78bfa", "#ffffff"];
+      const positions = new Float32Array(count * 3);
+      const randoms = new Float32Array(count * 4);
+      const colors = new Float32Array(count * 3);
+
+      for (let index = 0; index < count; index += 1) {
+        const radius = Math.sqrt(Math.random()) * 1.12;
+        const theta = Math.random() * Math.PI * 2;
+        positions.set([
+          Math.cos(theta) * radius,
+          Math.sin(theta) * radius,
+          Math.random() * 2 - 1
+        ], index * 3);
+        randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], index * 4);
+        colors.set(hexToRgb(palette[Math.floor(Math.random() * palette.length)]), index * 3);
+      }
+
+      const bindAttribute = (name, size, data) => {
+        const location = gl.getAttribLocation(program, name);
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(location);
+        gl.vertexAttribPointer(location, size, gl.FLOAT, false, 0, 0);
+      };
+
+      gl.useProgram(program);
+      bindAttribute("aPosition", 3, positions);
+      bindAttribute("aRandom", 4, randoms);
+      bindAttribute("aColor", 3, colors);
+
+      const uniforms = {
+        time: gl.getUniformLocation(program, "uTime"),
+        baseSize: gl.getUniformLocation(program, "uBaseSize"),
+        pixelRatio: gl.getUniformLocation(program, "uPixelRatio")
+      };
+
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let frame = 0;
+      let start = performance.now();
+
+      const resize = () => {
+        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        agentCanvas.width = Math.floor(width * dpr);
+        agentCanvas.height = Math.floor(height * dpr);
+        agentCanvas.style.width = `${width}px`;
+        agentCanvas.style.height = `${height}px`;
+        gl.viewport(0, 0, agentCanvas.width, agentCanvas.height);
+      };
+
+      const render = (now) => {
+        frame = requestAnimationFrame(render);
+
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+        gl.useProgram(program);
+        gl.uniform1f(uniforms.time, (now - start) * 0.000045);
+        gl.uniform1f(uniforms.baseSize, width < 700 ? 24 : 34);
+        gl.uniform1f(uniforms.pixelRatio, dpr);
+        gl.drawArrays(gl.POINTS, 0, count);
+      };
+
+      resize();
+
+      return {
+        resize,
+        start() {
+          start = performance.now();
+          frame = requestAnimationFrame(render);
+        },
+        destroy() {
+          cancelAnimationFrame(frame);
+        }
+      };
     };
 
     menuButton.addEventListener("click", () => {
@@ -2197,39 +2519,18 @@
       }
     });
 
-    if (canUseMotion && window.matchMedia("(pointer: fine)").matches) {
-      window.addEventListener("pointermove", (event) => {
-        cursorX += (event.clientX - cursorX) * 0.32;
-        cursorY += (event.clientY - cursorY) * 0.32;
-        agentTargetX = event.clientX;
-        agentTargetY = event.clientY;
-        document.body.classList.add("pointer-active");
-
-        if (!cursorFrame) {
-          cursorFrame = requestAnimationFrame(() => {
-            root.style.setProperty("--cursor-x", `${cursorX}px`);
-            root.style.setProperty("--cursor-y", `${cursorY}px`);
-            cursorFrame = 0;
-          });
-        }
-      }, { passive: true });
-
-      window.addEventListener("pointerleave", () => {
-        document.body.classList.remove("pointer-active");
-      });
-    }
-
-    updateIntroScroll();
-    window.addEventListener("scroll", updateIntroScroll, { passive: true });
+    updateScrollState();
+    updateWorksScroll();
+    agentParticles = createAgentParticles();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    worksGrid?.addEventListener("scroll", updateWorksScroll, { passive: true });
     window.addEventListener("resize", () => {
-      updateIntroScroll();
-      resizeAgentField();
+      updateScrollState();
+      updateWorksScroll();
+      agentParticles?.resize();
     }, { passive: true });
 
-    if (agentCtx && canUseMotion) {
-      resizeAgentField();
-      requestAnimationFrame(drawAgentField);
-    }
+    agentParticles?.start();
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
