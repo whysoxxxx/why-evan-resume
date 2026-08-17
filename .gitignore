@@ -11,6 +11,3 @@ package*.json
 
 # Large local source videos are kept out of GitHub
 *.mp4
-
-# Local-only documents
-*.pdf
